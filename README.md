@@ -15,27 +15,25 @@ That is why we even introduce wrappers for simple datatypes.
 
 ### Simplest usage example
 ```csharp
-var record = new InvoiceDocument(
-new List<Invoice>()
-{
-    new Invoice(
-        issuer: new LocalInvoiceParty(new TaxIdentifier({UserVatNumber})),
-        header: new InvoiceHeader(new LimitedString1to50("0"), new LimitedString1to50("50020"), DateTime.Now, BillType.RetailSalesReceipt, new CurrencyCode("EUR")),
-        revenueItems: new List<RevenueItem>
+var invoices = SequentialEnumerable.FromPreordered(
+    new RetailSalesReceipt(
+        issuer: new LocalCounterpart(new GreekTaxIdentifier({UserVatNumber})),
+        header: new InvoiceHeader(new LimitedString1to50("0"), new LimitedString1to50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
+        revenueItems: new List<NonNegativeRevenue>
         {
-            new RevenueItem(new Amount(88.50m), TaxType.Vat13, new Amount(11.50m), ClassificationType.RetailSalesOfGoodsAndServicesPrivateClientele, ClassificationCategory.ProvisionOfServicesIncome, new PositiveInt(1)),
-            new RevenueItem(new Amount(5.00m), TaxType.Vat0, new Amount(0.00m), ClassificationType.RetailSalesOfGoodsAndServicesPrivateClientele, ClassificationCategory.ProductSaleIncome, new PositiveInt(2), VatExemptionType.VatIncludedArticle43),
-            new RevenueItem(new Amount(16.13m), TaxType.Vat24, new Amount(3.87m), ClassificationType.RetailSalesOfGoodsAndServicesPrivateClientele, ClassificationCategory.ProductSaleIncome, new PositiveInt(3))
+            new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Products),
+            new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Services),
+            new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Other)
         },
-        payments: new List<Payment>
+        payments: new List<NonNegativePayment>
         {
-            new Payment(new Amount(125.00m), PaymentType.Cash),
+            new NonNegativePayment(new NonNegativeAmount(133.06m), PaymentType.DomesticPaymentsAccountNumber),
+            new NonNegativePayment(new NonNegativeAmount(66.53m), PaymentType.Cash)
         }
-    )
-});
+));
 
 var client = new AadeClient({UserId}, {UserSubscriptionKey});
-var response = await client.SendInvoicesAsync(invoiceDoc);
+var response = await client.SendInvoicesAsync(invoices);
 ```
 
 # NuGet

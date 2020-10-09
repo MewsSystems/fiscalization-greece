@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class NegativeInvoice : Invoice
+    public class CreditInvoice : Invoice
     {
-        public NegativeInvoice(
+        public CreditInvoice(
             InvoiceHeader header,
             LocalCounterpart issuer,
             IEnumerable<NegativeRevenue> revenueItems,
@@ -15,7 +15,7 @@ namespace Mews.Fiscalization.Greece.Model
             InvoiceRegistrationNumber invoiceRegistrationNumber = null,
             InvoiceRegistrationNumber cancelledByInvoiceRegistrationNumber = null,
             InvoiceRegistrationNumber correlatedInvoice = null)
-            : base(header, BillType.CreditInvoice, issuer, revenueItems, counterpart, payments, invoiceRegistrationNumber, cancelledByInvoiceRegistrationNumber, correlatedInvoice)
+            : base(header, issuer, revenueItems, payments, invoiceRegistrationNumber, cancelledByInvoiceRegistrationNumber, counterpart, correlatedInvoice)
         {
             if (counterpart == null)
             {

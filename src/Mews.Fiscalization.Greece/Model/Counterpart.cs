@@ -5,10 +5,10 @@ namespace Mews.Fiscalization.Greece.Model
 {
     public class Counterpart
     {
-        public Counterpart(CountryCode countryCode, NonEmptyString taxIdentifier = null, NonNegativeInt branch = null, string name = null, Address address = null)
+        public Counterpart(Country country, NonEmptyString taxIdentifier = null, NonNegativeInt branch = null, string name = null, Address address = null)
         {
             TaxIdentifier = taxIdentifier ?? new NonEmptyString("0");
-            CountryCode = countryCode ?? throw new ArgumentNullException(nameof(countryCode));
+            Country = country ?? throw new ArgumentNullException(nameof(country));
             Branch = branch ?? new NonNegativeInt(0);
             Name = name;
             Address = address;
@@ -20,7 +20,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public string Name { get; }
 
-        public CountryCode CountryCode { get; }
+        public Country Country { get; }
 
         public Address Address { get; }
     }

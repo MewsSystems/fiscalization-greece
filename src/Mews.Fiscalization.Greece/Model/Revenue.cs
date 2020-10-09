@@ -9,16 +9,14 @@ namespace Mews.Fiscalization.Greece.Model
             Amount netValue,
             Amount vatValue,
             TaxType taxType,
-            ClassificationType classificationType,
-            ClassificationCategory classificationCategory,
+            RevenueType revenueType,
             PositiveInt lineNumber = null,
             VatExemptionType? vatExemption = null)
         {
             NetValue = netValue ?? throw new ArgumentNullException(nameof(netValue));
             VatValue = vatValue ?? throw new ArgumentNullException(nameof(vatValue));
             TaxType = taxType;
-            ClassificationType = classificationType;
-            ClassificationCategory = classificationCategory;
+            RevenueType = revenueType;
             LineNumber = lineNumber ?? new PositiveInt(1);
             VatExemption = vatExemption;
 
@@ -36,9 +34,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public TaxType TaxType { get; }
 
-        public ClassificationType ClassificationType { get; }
-
-        public ClassificationCategory ClassificationCategory { get; }
+        public RevenueType RevenueType { get; }
 
         public VatExemptionType? VatExemption { get; }
     }

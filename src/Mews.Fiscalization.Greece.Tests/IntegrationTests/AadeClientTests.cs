@@ -62,17 +62,20 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
             // Step 1 - regular invoice
             var invoices = SequentialEnumerable.FromPreordered(
-                new NonNegativeInvoice(
+                new SalesInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
-                    billType: BillType.SalesInvoice,
                     header: new InvoiceHeader(new LimitedString1to50("0"), new LimitedString1to50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: new List<NonNegativeRevenue>
                     {
-                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, ClassificationType.OtherOrdinaryIncome, ClassificationCategory.OtherIncomeAndProfits)
+                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Products),
+                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services),
+                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other)
                     },
                     payments: new List<NonNegativePayment>
                     {
-                        new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash)
+                        new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
+                        new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.OnCredit),
+                        new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.DomesticPaymentsAccountNumber)
                     },
                     counterpart: new LocalCounterpart(new GreekTaxIdentifier("090701900"))
                 ));
@@ -89,17 +92,20 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             var correlatedInvoice = response.SendInvoiceResults.First().Item.Success.InvoiceRegistrationNumber.Value;
 
             var negativeInvoice = SequentialEnumerable.FromPreordered(
-                new NegativeInvoice(
+                new CreditInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     correlatedInvoice: new InvoiceRegistrationNumber(correlatedInvoice),
                     header: new InvoiceHeader(new LimitedString1to50("0"), new LimitedString1to50("50021"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: new List<NegativeRevenue>
                     {
-                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, ClassificationType.OtherSalesOfGoodsAndServices, ClassificationCategory.ProductSaleIncome)
+                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Products),
+                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Services),
+                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Other)
                     },
                     payments: new List<NegativePayment>
                     {
-                        new NegativePayment(new NegativeAmount(-66.53m), PaymentType.Cash)
+                        new NegativePayment(new NegativeAmount(-133.06m), PaymentType.Cash),
+                        new NegativePayment(new NegativeAmount(-66.53m), PaymentType.DomesticPaymentsAccountNumber)
                     },
                     counterpart: new LocalCounterpart(new GreekTaxIdentifier("090701900"), new NonNegativeInt(0), address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
             ));
