@@ -41,7 +41,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
         [Theory(Skip = "Temporary skip")]
         [MemberData(nameof(AadeTestInvoicesData.GetInvoices), MemberType = typeof(AadeTestInvoicesData))]
-        public async Task ValidInvoicesWork(ISequentialEnumerable<Invoice> invoices)
+        public async Task ValidInvoicesWork(SequentialEnumerableStartingWithOne<Invoice> invoices)
         {
             // Arrange
             var client = new AadeClient(UserId, UserSubscriptionKey, AadeEnvironment.Sandbox);
@@ -63,7 +63,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             // Act
 
             // Step 1 - regular invoice
-            var invoices = SequentialEnumerableStartingWithOne.FromPreordered(
+            var invoices = SequentialEnumerableStartingWithOne.FromPreordered<Invoice>(
                 new SalesInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
@@ -93,7 +93,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             // Step 2 - negative invoice
             var correlatedInvoice = response.SendInvoiceResults.First().Value.Success.InvoiceRegistrationNumber.Value;
 
-            var negativeInvoice = SequentialEnumerableStartingWithOne.FromPreordered(
+            var negativeInvoice = SequentialEnumerableStartingWithOne.FromPreordered<Invoice>(
                 new CreditInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     correlatedInvoice: correlatedInvoice,
