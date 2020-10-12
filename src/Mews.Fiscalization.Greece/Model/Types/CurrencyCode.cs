@@ -1,12 +1,15 @@
 ﻿using Mews.Fiscalization.Greece.Dto.Xsd;
 using System;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model.Types
 {
     public class CurrencyCode : LimitedString
     {
+        private static readonly StringLimitation Limitation = new StringLimitation(minLength: 3, maxLength: 3);
+
         public CurrencyCode(string value)
-            : base(value, minLength: 3, maxLength: 3)
+            : base(value, Limitation)
         {
             if (!Enum.TryParse<Currency>(value, out _))
             {
@@ -16,7 +19,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
 
         public static bool IsValid(string value)
         {
-            return IsValid(value, minLength: 3, maxLength: 3) && Enum.TryParse<Currency>(value, out _);
+            return LimitedString.IsValid(value, Limitation) && Enum.TryParse<Currency>(value, out _);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Mews.Fiscalization.Greece.Model.Types;
+﻿using Mews.Fiscalization.Core.Model;
+using Mews.Fiscalization.Greece.Model.Types;
 
 namespace Mews.Fiscalization.Greece.Model
 {

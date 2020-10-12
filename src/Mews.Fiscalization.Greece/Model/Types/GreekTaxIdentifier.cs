@@ -1,28 +1,19 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model.Types
 {
     public class GreekTaxIdentifier : NonEmptyString
     {
-        private static readonly Regex Pattern = new Regex("[0-9]{9}$");
+        private static readonly StringLimitation Limitation = new StringLimitation(minLength: 3, maxLength: 3, pattern: "[0-9]{9}$");
 
         public GreekTaxIdentifier(string value)
-            : base(value)
+            : base(value, Limitation)
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-            if (!Pattern.IsMatch(value))
-            {
-                throw new ArgumentException($"The value '{value}' does not match the pattern '{Pattern}'");
-            }
         }
 
-        public new static bool IsValid(string value)
+        public static bool IsValid(string value)
         {
-            return value != null && Pattern.IsMatch(value);
+            return IsValid(value, Limitation);
         }
     }
 }

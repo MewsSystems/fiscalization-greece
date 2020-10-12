@@ -10,8 +10,8 @@ namespace Mews.Fiscalization.Greece.Model
             LocalCounterpart issuer,
             IEnumerable<NonNegativeRevenue> revenueItems,
             IEnumerable<NonNegativePayment> payments = null,
-            InvoiceRegistrationNumber invoiceRegistrationNumber = null,
-            InvoiceRegistrationNumber cancelledByInvoiceRegistrationNumber = null)
+            long? invoiceRegistrationNumber = null,
+            long? cancelledByInvoiceRegistrationNumber = null)
             : base(header, issuer, revenueItems, payments, invoiceRegistrationNumber, cancelledByInvoiceRegistrationNumber)
         {
         }

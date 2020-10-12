@@ -1,13 +1,14 @@
 ﻿using Mews.Fiscalization.Greece.Model.Types;
 using System;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
     public class InvoiceHeader
     {
         public InvoiceHeader(
-            LimitedString1to50 invoiceSeries,
-            LimitedString1to50 invoiceSerialNumber,
+            LimitedString1To50 invoiceSeries,
+            LimitedString1To50 invoiceSerialNumber,
             DateTime invoiceIssueDate,
             string invoiceIdentifier = null,
             CurrencyCode currencyCode = null,
@@ -21,9 +22,9 @@ namespace Mews.Fiscalization.Greece.Model
             ExchangeRate = exchangeRate;
         }
 
-        public LimitedString1to50 InvoiceSeries { get; }
+        public LimitedString1To50 InvoiceSeries { get; }
 
-        public LimitedString1to50 InvoiceSerialNumber { get; }
+        public LimitedString1To50 InvoiceSerialNumber { get; }
 
         public DateTime InvoiceIssueDate { get; }
 

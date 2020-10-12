@@ -12,9 +12,9 @@ namespace Mews.Fiscalization.Greece.Model
             IEnumerable<NegativeRevenue> revenueItems,
             Counterpart counterpart,
             IEnumerable<NegativePayment> payments = null,
-            InvoiceRegistrationNumber invoiceRegistrationNumber = null,
-            InvoiceRegistrationNumber cancelledByInvoiceRegistrationNumber = null,
-            InvoiceRegistrationNumber correlatedInvoice = null)
+            long? invoiceRegistrationNumber = null,
+            long? cancelledByInvoiceRegistrationNumber = null,
+            long? correlatedInvoice = null)
             : base(header, issuer, revenueItems, payments, invoiceRegistrationNumber, cancelledByInvoiceRegistrationNumber, counterpart, correlatedInvoice)
         {
             if (counterpart == null)

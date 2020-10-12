@@ -12,10 +12,10 @@ namespace Mews.Fiscalization.Greece.Model
             LocalCounterpart issuer,
             IEnumerable<Revenue> revenueItems,
             IEnumerable<Payment> payments = null,
-            InvoiceRegistrationNumber invoiceRegistrationNumber = null,
-            InvoiceRegistrationNumber cancelledByInvoiceRegistrationNumber = null,
+            long? invoiceRegistrationNumber = null,
+            long? cancelledByInvoiceRegistrationNumber = null,
             Counterpart counterpart = null,
-            InvoiceRegistrationNumber correlatedInvoice = null)
+            long? correlatedInvoice = null)
         {
             Header = header ?? throw new ArgumentNullException(nameof(header));
             Issuer = issuer ?? throw new ArgumentNullException(nameof(issuer));
@@ -42,10 +42,10 @@ namespace Mews.Fiscalization.Greece.Model
 
         public IEnumerable<Payment> Payments { get; }
 
-        public InvoiceRegistrationNumber InvoiceRegistrationNumber { get; }
+        public long? InvoiceRegistrationNumber { get; }
 
-        public InvoiceRegistrationNumber CanceledByInvoiceRegistrationNumber { get; }
+        public long? CanceledByInvoiceRegistrationNumber { get; }
 
-        public InvoiceRegistrationNumber CorrelatedInvoice { get; }
+        public long? CorrelatedInvoice { get; }
     }
 }

@@ -1,11 +1,14 @@
 ﻿using System;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model.Types
 {
     public class CountryCode : LimitedString
     {
+        private static readonly StringLimitation Limitation = new StringLimitation(minLength: 2, maxLength: 2);
+
         public CountryCode(string value)
-            : base(value, minLength: 2, maxLength: 2)
+            : base(value, Limitation)
         {
             if (!Enum.TryParse<Dto.Xsd.Country>(value, out _))
             {
@@ -15,7 +18,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
 
         public static bool IsValid(string value)
         {
-            return IsValid(value, minLength: 2, maxLength: 2) && Enum.TryParse<Dto.Xsd.Country>(value, out _);
+            return LimitedString.IsValid(value, Limitation) && Enum.TryParse<Dto.Xsd.Country>(value, out _);
         }
     }
 }

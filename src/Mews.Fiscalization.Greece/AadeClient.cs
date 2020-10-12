@@ -2,6 +2,7 @@
 using Mews.Fiscalization.Greece.Model;
 using Mews.Fiscalization.Greece.Model.Result;
 using System.Threading.Tasks;
+using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Collections;
 
 namespace Mews.Fiscalization.Greece

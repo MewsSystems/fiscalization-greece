@@ -1,8 +1,8 @@
-﻿using Mews.Fiscalization.Greece.Extensions;
-using Mews.Fiscalization.Greece.Model;
+﻿using Mews.Fiscalization.Greece.Model;
 using System;
 using System.Linq;
-using Mews.Fiscalization.Greece.Model.Collections;
+using Mews.Fiscalization.Core.Extensions;
+using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Types;
 using TaxType = Mews.Fiscalization.Greece.Model.TaxType;
 
@@ -16,7 +16,7 @@ namespace Mews.Fiscalization.Greece.Mapper
         {
             return new Dto.Xsd.InvoicesDoc
             {
-                Invoices = invoices.Items.Select(invoice => GetInvoice(invoice)).ToArray()
+                Invoices = invoices.Values.Select(invoice => GetInvoice(invoice)).ToArray()
             };
         }
 
@@ -25,9 +25,9 @@ namespace Mews.Fiscalization.Greece.Mapper
             return new Dto.Xsd.Invoice
             {
                 InvoiceMarkSpecified = invoice.InvoiceRegistrationNumber.IsNotNull(),
-                InvoiceMark = invoice.InvoiceRegistrationNumber?.Value ?? 0,
+                InvoiceMark = invoice.InvoiceRegistrationNumber ?? 0,
                 InvoiceCancelationMarkSpecified = invoice.CanceledByInvoiceRegistrationNumber.IsNotNull(),
-                InvoiceCancelationMark = invoice.CanceledByInvoiceRegistrationNumber?.Value ?? 0,
+                InvoiceCancelationMark = invoice.CanceledByInvoiceRegistrationNumber ?? 0,
                 InvoiceId = invoice.Header.InvoiceIdentifier,
                 InvoiceIssuer = GetInvoiceParty(invoice.Issuer),
                 InvoiceCounterpart = GetInvoiceParty(invoice.Counterpart),
@@ -87,7 +87,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 ExchangeRateSpecified = invoice.Header.ExchangeRate.IsNotNull(),
                 ExchangeRate = invoice.Header.ExchangeRate?.Value ?? 0,
                 CorrelatedInvoicesSpecified = invoice.CorrelatedInvoice.IsNotNull(),
-                CorrelatedInvoices = invoice.CorrelatedInvoice?.Value ?? 0
+                CorrelatedInvoices = invoice.CorrelatedInvoice ?? 0
 
             };
 
