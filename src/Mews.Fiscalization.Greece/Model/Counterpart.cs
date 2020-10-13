@@ -4,7 +4,7 @@ using Mews.Fiscalization.Greece.Model.Types;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class Counterpart
+    public abstract class Counterpart
     {
         public Counterpart(Country country, NonEmptyString taxIdentifier = null, NonNegativeInt branch = null, string name = null, Address address = null)
         {

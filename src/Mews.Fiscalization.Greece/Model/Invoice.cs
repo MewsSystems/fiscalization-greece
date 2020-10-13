@@ -1,6 +1,5 @@
 ﻿using Mews.Fiscalization.Core.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Mews.Fiscalization.Greece.Model
@@ -11,7 +10,7 @@ namespace Mews.Fiscalization.Greece.Model
             InvoiceHeader header,
             LocalCounterpart issuer,
             ISequentialEnumerableStartingWithOne<Revenue> revenueItems,
-            IEnumerable<Payment> payments = null,
+            INonEmptyEnumerable<Payment> payments,
             long? invoiceRegistrationNumber = null,
             long? cancelledByInvoiceRegistrationNumber = null,
             Counterpart counterpart = null,
@@ -19,9 +18,9 @@ namespace Mews.Fiscalization.Greece.Model
         {
             Header = header ?? throw new ArgumentNullException(nameof(header));
             Issuer = issuer ?? throw new ArgumentNullException(nameof(issuer));
-            RevenueItems = revenueItems;
+            RevenueItems = revenueItems  ?? throw new ArgumentNullException(nameof(revenueItems));;
+            Payments = payments ?? throw new ArgumentNullException(nameof(payments));
             Counterpart = counterpart;
-            Payments = payments;
             InvoiceRegistrationNumber = invoiceRegistrationNumber;
             CanceledByInvoiceRegistrationNumber = cancelledByInvoiceRegistrationNumber;
             CorrelatedInvoice = correlatedInvoice;
@@ -36,11 +35,11 @@ namespace Mews.Fiscalization.Greece.Model
 
         public LocalCounterpart Issuer { get; }
 
-        public ISequentialEnumerable<Revenue> RevenueItems { get; }
+        public ISequentialEnumerableStartingWithOne<Revenue> RevenueItems { get; }
+
+        public INonEmptyEnumerable<Payment> Payments { get; }
 
         public Counterpart Counterpart { get; }
-
-        public IEnumerable<Payment> Payments { get; }
 
         public long? InvoiceRegistrationNumber { get; }
 
