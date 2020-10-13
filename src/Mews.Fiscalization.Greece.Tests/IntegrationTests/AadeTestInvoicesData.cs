@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Core.Model.Collections;
+using Mews.Fiscalization.Greece.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 {
@@ -39,12 +40,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 new RetailSalesReceipt(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NonNegativeRevenue>
-                    {
+                    revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(
                         new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Products),
                         new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Other)
-                    },
+                    ),
                     payments: new List<NonNegativePayment>
                     {
                         new NonNegativePayment(new NonNegativeAmount(133.06m), PaymentType.DomesticPaymentsAccountNumber),
@@ -60,12 +60,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 new SalesInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NonNegativeRevenue>
-                    {
+                    revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Products),
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other)
-                    },
+                    ),
                     payments: new List<NonNegativePayment>
                     {
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
@@ -83,12 +82,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 new SalesInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NonNegativeRevenue>
-                    {
+                    revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(
                         new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Products),
                         new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Other)
-                    },
+                    ),
                     payments: new List<NonNegativePayment>
                     {
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
@@ -106,12 +104,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 new SimplifiedInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NonNegativeRevenue>
-                    {
+                    revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Products),
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other)
-                    },
+                    ),
                     payments: new List<NonNegativePayment>
                     {
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
@@ -128,12 +125,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 new CreditInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NegativeRevenue>
-                    {
+                    revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Products),
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
-                    },
+                    ),
                     payments: new List<NegativePayment>
                     {
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.Cash),
@@ -151,12 +147,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 new CreditInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NegativeRevenue>
-                    {
+                    revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Products),
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
-                    },
+                    ),
                     payments: new List<NegativePayment>
                     {
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.Cash),

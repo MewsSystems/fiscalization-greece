@@ -1,7 +1,7 @@
 ﻿using Mews.Fiscalization.Greece.Dto.Xsd;
 using System.Linq;
-using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Collections;
+using Mews.Fiscalization.Core.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Model.Result
 {
@@ -9,14 +9,15 @@ namespace Mews.Fiscalization.Greece.Model.Result
     {
         internal SendInvoicesResult(ResponseDoc responseDoc)
         {
-            SendInvoiceResults = SequentialEnumerable.Create(responseDoc.Responses.Select(response => new IndexedItem<SendInvoiceResult>(response.Index, new SendInvoiceResult(
-                invoiceIdentifier: response.InvoiceUid,
-                invoiceRegistrationNumber: response.InvoiceMark,
-                invoiceRegistrationNumberSpecified: response.InvoiceMarkSpecified,
-                errors: response.Errors?.Select(error => new ResultError(MapErrorCode(error.Code, response.StatusCode), error.Message))))));
+            SendInvoiceResults = SequentialEnumerableStartingWithOne.Create(responseDoc.Responses.Select(r => new IndexedItem<SendInvoiceResult>(r.Index, new SendInvoiceResult(
+                invoiceIdentifier: r.InvoiceUid,
+                invoiceRegistrationNumber: r.InvoiceMark,
+                invoiceRegistrationNumberSpecified: r.InvoiceMarkSpecified,
+                errors: r.Errors?.Select(error => new ResultError(MapErrorCode(error.Code, r.StatusCode), error.Message))
+            ))));
         }
 
-        public ISequentialEnumerable<SendInvoiceResult> SendInvoiceResults { get; }
+        public SequentialEnumerableStartingWithOne<SendInvoiceResult> SendInvoiceResults { get; }
 
         private string MapErrorCode(string errorCode, StatusCode statusCode)
         {
