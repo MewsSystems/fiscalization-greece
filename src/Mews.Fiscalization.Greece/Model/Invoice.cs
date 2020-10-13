@@ -1,4 +1,7 @@
-﻿using Mews.Fiscalization.Greece.Model.Types;
+﻿using Mews.Fiscalization.Core.Model;
+using Mews.Fiscalization.Core.Model.Collections;
+using Mews.Fiscalization.Greece.Model.Collections;
+using Mews.Fiscalization.Greece.Model.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +22,7 @@ namespace Mews.Fiscalization.Greece.Model
         {
             Header = header ?? throw new ArgumentNullException(nameof(header));
             Issuer = issuer ?? throw new ArgumentNullException(nameof(issuer));
-            RevenueItems = revenueItems.ToList();
+            RevenueItems = SequentialEnumerableStartingWithOne.Create(revenueItems.Select((item, index) => new IndexedItem<Revenue>(index, item)));
             Counterpart = counterpart;
             Payments = payments;
             InvoiceRegistrationNumber = invoiceRegistrationNumber;
@@ -36,7 +39,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public LocalCounterpart Issuer { get; }
 
-        public IReadOnlyList<Revenue> RevenueItems { get; }
+        public ISequentialEnumerable<Revenue> RevenueItems { get; }
 
         public Counterpart Counterpart { get; }
 

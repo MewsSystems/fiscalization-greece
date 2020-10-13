@@ -10,9 +10,8 @@ namespace Mews.Fiscalization.Greece.Model
             NegativeAmount vatValue,
             TaxType taxType,
             RevenueType revenueType,
-            PositiveInt lineNumber = null,
             VatExemptionType? vatExemption = null)
-            : base(netValue, vatValue, taxType, revenueType, lineNumber, vatExemption)
+            : base(netValue, vatValue, taxType, revenueType, vatExemption)
         {
         }
     }

@@ -5,6 +5,7 @@ using Mews.Fiscalization.Core.Extensions;
 using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Types;
 using TaxType = Mews.Fiscalization.Greece.Model.TaxType;
+using Mews.Fiscalization.Greece.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Mapper
 {
@@ -99,11 +100,12 @@ namespace Mews.Fiscalization.Greece.Mapper
             return invoiceHeader;
         }
 
-        private static Dto.Xsd.InvoiceDetail GetInvoiceDetail(Invoice invoice, Revenue revenueItem)
+        private static Dto.Xsd.InvoiceDetail GetInvoiceDetail(Invoice invoice, IIndexedItem<Revenue> indexedRevenueItem)
         {
+            var revenueItem = indexedRevenueItem.Value;
             var invoiceDetail = new Dto.Xsd.InvoiceDetail
             {
-                LineNumber = revenueItem.LineNumber.Value,
+                LineNumber = indexedRevenueItem.Index,
                 NetValue = revenueItem.NetValue.Value,
                 VatAmount = revenueItem.VatValue.Value,
                 VatCategory = MapVatCategory(revenueItem.TaxType),
@@ -123,17 +125,17 @@ namespace Mews.Fiscalization.Greece.Mapper
         {
             var invoiceSummary = new Dto.Xsd.InvoiceSummary
             {
-                TotalNetValue = invoice.RevenueItems.Sum(x => x.NetValue.Value),
-                TotalVatAmount = invoice.RevenueItems.Sum(x => x.VatValue.Value)
+                TotalNetValue = invoice.RevenueItems.Sum(x => x.Value.NetValue.Value),
+                TotalVatAmount = invoice.RevenueItems.Sum(x => x.Value.VatValue.Value)
             };
 
             invoiceSummary.IncomeClassification = invoice.RevenueItems.GroupBy(
-                keySelector: m => m.RevenueType,
+                keySelector: m => m.Value.RevenueType,
                 resultSelector: (key, revenueItems) => new Dto.Xsd.IncomeClassification
                 {
                     ClassificationCategory = MapRevenueClassification(invoice, key).Category,
                     ClassificationType = MapRevenueClassification(invoice, key).Type,
-                    Amount = revenueItems.Sum(i => i.NetValue.Value)
+                    Amount = revenueItems.Sum(i => i.Value.NetValue.Value)
                 }
             ).ToArray();
 
