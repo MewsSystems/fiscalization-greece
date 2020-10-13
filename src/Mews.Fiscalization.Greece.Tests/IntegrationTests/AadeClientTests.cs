@@ -67,12 +67,12 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 new SalesInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NonNegativeRevenue>
+                    revenueItems: SequentialEnumerableStartingWithOne.Create(new List<IndexedItem<NonNegativeRevenue>>
                     {
-                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Products),
-                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services),
-                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other)
-                    },
+                        new IndexedItem<NonNegativeRevenue>(1, new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Products)),
+                        new IndexedItem<NonNegativeRevenue>(2, new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services)),
+                        new IndexedItem<NonNegativeRevenue>(3, new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other))
+                    }),
                     payments: new List<NonNegativePayment>
                     {
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
@@ -98,12 +98,12 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
                     correlatedInvoice: correlatedInvoice,
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50021"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
-                    revenueItems: new List<NegativeRevenue>
+                    revenueItems: SequentialEnumerableStartingWithOne.Create(new List<IndexedItem<NegativeRevenue>>
                     {
-                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Products),
-                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Services),
-                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Other)
-                    },
+                        new IndexedItem<NegativeRevenue>(1, new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Products)),
+                        new IndexedItem<NegativeRevenue>(2, new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Services)),
+                        new IndexedItem<NegativeRevenue>(3, new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Other))
+                    }),
                     payments: new List<NegativePayment>
                     {
                         new NegativePayment(new NegativeAmount(-133.06m), PaymentType.Cash),

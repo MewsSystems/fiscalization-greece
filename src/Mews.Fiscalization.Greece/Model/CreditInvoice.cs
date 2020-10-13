@@ -1,6 +1,6 @@
 ﻿using System;
-using Mews.Fiscalization.Greece.Model.Types;
 using System.Collections.Generic;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
@@ -9,7 +9,7 @@ namespace Mews.Fiscalization.Greece.Model
         public CreditInvoice(
             InvoiceHeader header,
             LocalCounterpart issuer,
-            IEnumerable<NegativeRevenue> revenueItems,
+            ISequentialEnumerable<NegativeRevenue> revenueItems,
             Counterpart counterpart,
             IEnumerable<NegativePayment> payments = null,
             long? invoiceRegistrationNumber = null,
