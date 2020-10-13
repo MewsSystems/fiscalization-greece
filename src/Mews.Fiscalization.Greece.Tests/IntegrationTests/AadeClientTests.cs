@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mews.Fiscalization.Core.Model;
+using Mews.Fiscalization.Core.Model.Collections;
 using Xunit;
 
 namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
@@ -39,7 +41,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
         [Theory(Skip = "Temporary skip")]
         [MemberData(nameof(AadeTestInvoicesData.GetInvoices), MemberType = typeof(AadeTestInvoicesData))]
-        public async Task ValidInvoicesWork(ISequentialEnumerable<Invoice> invoices)
+        public async Task ValidInvoicesWork(SequentialEnumerableStartingWithOne<Invoice> invoices)
         {
             // Arrange
             var client = new AadeClient(UserId, UserSubscriptionKey, AadeEnvironment.Sandbox);
@@ -49,7 +51,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
             // Assert
             Assert.NotEmpty(response.SendInvoiceResults);
-            Assert.True(response.SendInvoiceResults.Single().Item.IsSuccess);
+            Assert.True(response.SendInvoiceResults.Single().Value.IsSuccess);
         }
 
         [Fact(Skip = "Temporary skip")]
@@ -61,10 +63,10 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             // Act
 
             // Step 1 - regular invoice
-            var invoices = SequentialEnumerable.FromPreordered(
+            var invoices = SequentialEnumerableStartingWithOne.FromPreordered<Invoice>(
                 new SalesInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
-                    header: new InvoiceHeader(new LimitedString1to50("0"), new LimitedString1to50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
+                    header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: new List<NonNegativeRevenue>
                     {
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Products),
@@ -83,19 +85,19 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             var response = await client.SendInvoicesAsync(invoices);
 
             Assert.NotEmpty(response.SendInvoiceResults);
-            Assert.True(response.SendInvoiceResults.Single().Item.IsSuccess);
+            Assert.True(response.SendInvoiceResults.Single().Value.IsSuccess);
 
             // We need to wait some time to allow external system to store the mark from the first call
             await Task.Delay(1000);
 
             // Step 2 - negative invoice
-            var correlatedInvoice = response.SendInvoiceResults.First().Item.Success.InvoiceRegistrationNumber.Value;
+            var correlatedInvoice = response.SendInvoiceResults.First().Value.Success.InvoiceRegistrationNumber.Value;
 
-            var negativeInvoice = SequentialEnumerable.FromPreordered(
+            var negativeInvoice = SequentialEnumerableStartingWithOne.FromPreordered<Invoice>(
                 new CreditInvoice(
                     issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
-                    correlatedInvoice: new InvoiceRegistrationNumber(correlatedInvoice),
-                    header: new InvoiceHeader(new LimitedString1to50("0"), new LimitedString1to50("50021"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
+                    correlatedInvoice: correlatedInvoice,
+                    header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50021"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: new List<NegativeRevenue>
                     {
                         new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Products),
@@ -114,7 +116,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
             // Assert
             Assert.NotEmpty(negativeInvoiceResponse.SendInvoiceResults);
-            Assert.True(negativeInvoiceResponse.SendInvoiceResults.Single().Item.IsSuccess);
+            Assert.True(negativeInvoiceResponse.SendInvoiceResults.Single().Value.IsSuccess);
         }
     }
 }

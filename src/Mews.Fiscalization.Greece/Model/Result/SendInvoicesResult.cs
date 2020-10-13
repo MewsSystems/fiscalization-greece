@@ -1,5 +1,6 @@
 ﻿using Mews.Fiscalization.Greece.Dto.Xsd;
 using System.Linq;
+using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Model.Result
@@ -8,7 +9,7 @@ namespace Mews.Fiscalization.Greece.Model.Result
     {
         internal SendInvoicesResult(ResponseDoc responseDoc)
         {
-            SendInvoiceResults = new SequentialEnumerable<SendInvoiceResult>(responseDoc.Responses.Select(response => new IndexedItem<SendInvoiceResult>(response.Index, new SendInvoiceResult(
+            SendInvoiceResults = SequentialEnumerable.Create(responseDoc.Responses.Select(response => new IndexedItem<SendInvoiceResult>(response.Index, new SendInvoiceResult(
                 invoiceIdentifier: response.InvoiceUid,
                 invoiceRegistrationNumber: response.InvoiceMark,
                 invoiceRegistrationNumberSpecified: response.InvoiceMarkSpecified,
