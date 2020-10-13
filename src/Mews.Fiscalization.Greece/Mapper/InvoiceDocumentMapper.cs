@@ -1,11 +1,9 @@
 ﻿using Mews.Fiscalization.Greece.Model;
 using System;
 using System.Linq;
-using Mews.Fiscalization.Core.Extensions;
 using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Types;
 using TaxType = Mews.Fiscalization.Greece.Model.TaxType;
-using Mews.Fiscalization.Greece.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Mapper
 {

@@ -10,7 +10,7 @@ namespace Mews.Fiscalization.Greece.Model
         public Invoice(
             InvoiceHeader header,
             LocalCounterpart issuer,
-            ISequentialEnumerable<Revenue> revenueItems,
+            ISequentialEnumerableStartingWithOne<Revenue> revenueItems,
             IEnumerable<Payment> payments = null,
             long? invoiceRegistrationNumber = null,
             long? cancelledByInvoiceRegistrationNumber = null,

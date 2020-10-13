@@ -1,7 +1,4 @@
-﻿using Mews.Fiscalization.Greece.Dto.Xsd;
-using System;
-
-namespace Mews.Fiscalization.Greece.Model.Types
+﻿namespace Mews.Fiscalization.Greece.Model.Types
 {
     public class Country
     {

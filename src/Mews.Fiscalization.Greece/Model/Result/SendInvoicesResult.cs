@@ -1,7 +1,6 @@
 ﻿using Mews.Fiscalization.Greece.Dto.Xsd;
 using System.Linq;
-using Mews.Fiscalization.Greece.Model.Collections;
-using Mews.Fiscalization.Core.Model.Collections;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model.Result
 {
@@ -17,7 +16,7 @@ namespace Mews.Fiscalization.Greece.Model.Result
             ))));
         }
 
-        public SequentialEnumerableStartingWithOne<SendInvoiceResult> SendInvoiceResults { get; }
+        public ISequentialEnumerableStartingWithOne<SendInvoiceResult> SendInvoiceResults { get; }
 
         private string MapErrorCode(string errorCode, StatusCode statusCode)
         {
