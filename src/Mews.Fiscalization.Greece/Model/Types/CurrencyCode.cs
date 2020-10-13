@@ -1,25 +1,24 @@
 ﻿using Mews.Fiscalization.Greece.Dto.Xsd;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model.Types
 {
     public class CurrencyCode : LimitedString
     {
-        private static readonly StringLimitation Limitation = new StringLimitation(minLength: 3, maxLength: 3);
+        private static readonly IEnumerable<string> AllowedValues = Enum.GetValues(typeof(Currency)).OfType<Currency>().Select(v => v.ToString());
+        private static readonly StringLimitation Limitation = new StringLimitation(minLength: 3, maxLength: 3, allowedValues: AllowedValues);
 
         public CurrencyCode(string value)
             : base(value, Limitation)
         {
-            if (!Enum.TryParse<Currency>(value, out _))
-            {
-                throw new ArgumentException("Currency code is not valid ISO-4217 code.", nameof(value));
-            }
         }
 
         public static bool IsValid(string value)
         {
-            return LimitedString.IsValid(value, Limitation) && Enum.TryParse<Currency>(value, out _);
+            return IsValid(value, Limitation);
         }
     }
 }

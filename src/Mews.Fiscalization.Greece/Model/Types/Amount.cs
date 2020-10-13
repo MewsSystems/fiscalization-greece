@@ -1,24 +1,25 @@
-﻿using Mews.Fiscalization.Core.Model;
+﻿using System.Collections.Generic;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model.Types
 {
     public abstract class Amount : LimitedDecimal
     {
-        protected static readonly int maxDecimalPlaces = 2;
+        private static readonly DecimalLimitation Limitation = new DecimalLimitation(maxDecimalPlaces: 2);
 
-        public Amount(decimal value, decimal? minValue = null, decimal? maxValue = null, bool includeMax = true)
-            : base(value, GetLimitation(minValue: minValue, maxValue: maxValue, includeMax: includeMax))
+        public Amount(decimal value, DecimalLimitation limitation)
+            : base(value, Limitation.Concat(limitation.ToEnumerable()))
         {
         }
 
-        public static bool IsValid(decimal value, decimal? minValue = null, decimal? maxValue = null, bool includeMax = true)
+        protected new static bool IsValid(decimal value, DecimalLimitation limitation)
         {
-            return LimitedDecimal.IsValid(value, GetLimitation(minValue: minValue, maxValue: maxValue, includeMax: includeMax));
+            return IsValid(value, limitation.ToEnumerable());
         }
 
-        private static DecimalLimitation GetLimitation(decimal? minValue = null, decimal? maxValue = null, bool includeMax = true)
+        protected new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
         {
-            return new DecimalLimitation(maxDecimalPlaces: maxDecimalPlaces, min: minValue, max: maxValue, includeMax: includeMax);
+            return LimitedDecimal.IsValid(value, Limitation.Concat(limitations));
         }
     }
 }

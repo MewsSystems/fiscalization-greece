@@ -87,7 +87,6 @@ namespace Mews.Fiscalization.Greece.Mapper
                 ExchangeRate = invoice.Header.ExchangeRate?.Value ?? 0,
                 CorrelatedInvoicesSpecified = invoice.CorrelatedInvoice.IsNotNull(),
                 CorrelatedInvoices = invoice.CorrelatedInvoice ?? 0
-
             };
 
             if (invoice.Header.CurrencyCode.IsNotNull())
