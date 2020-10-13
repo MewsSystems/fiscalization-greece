@@ -1,4 +1,5 @@
 ﻿using Mews.Fiscalization.Core.Model;
+using Mews.Fiscalization.Core.Model.Collections;
 using System.Collections.Generic;
 
 namespace Mews.Fiscalization.Greece.Model
@@ -8,7 +9,7 @@ namespace Mews.Fiscalization.Greece.Model
         public SimplifiedInvoice(
             InvoiceHeader header,
             LocalCounterpart issuer,
-            ISequentialEnumerable<NonNegativeRevenue> revenueItems,
+            SequentialEnumerableStartingWithOne<NonNegativeRevenue> revenueItems,
             IEnumerable<NonNegativePayment> payments = null,
             long? invoiceRegistrationNumber = null,
             long? cancelledByInvoiceRegistrationNumber = null)
