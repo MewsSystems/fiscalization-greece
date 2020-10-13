@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mews.Fiscalization.Core.Model;
-using Mews.Fiscalization.Core.Model.Collections;
-using Mews.Fiscalization.Greece.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 {
@@ -45,11 +43,10 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(53.65m), new NonNegativeAmount(12.88m), TaxType.Vat6, RevenueType.Other)
                     ),
-                    payments: new List<NonNegativePayment>
-                    {
+                    payments: NonEmptyEnumerable.Create(
                         new NonNegativePayment(new NonNegativeAmount(133.06m), PaymentType.DomesticPaymentsAccountNumber),
                         new NonNegativePayment(new NonNegativeAmount(66.53m), PaymentType.Cash)
-                    }
+                    )
                 )
             );
         }
@@ -65,12 +62,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other)
                     ),
-                    payments: new List<NonNegativePayment>
-                    {
+                    payments: NonEmptyEnumerable.Create(
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.OnCredit),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.DomesticPaymentsAccountNumber)
-                    },
+                    ),
                     counterpart: new LocalCounterpart(new GreekTaxIdentifier("090701900"))
                 )
             );
@@ -87,13 +83,12 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Other)
                     ),
-                    payments: new List<NonNegativePayment>
-                    {
+                    payments: NonEmptyEnumerable.Create(
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.OnCredit),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.DomesticPaymentsAccountNumber)
-                    },
-                    counterpart: new Counterpart(new Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), new NonNegativeInt(0), "Name", new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
+                    ),
+                    counterpart: new ForeignCounterpart(new Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), new NonNegativeInt(0), "Name", new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
                 )
             );
         }
@@ -109,12 +104,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services),
                         new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other)
                     ),
-                    payments: new List<NonNegativePayment>
-                    {
+                    payments: NonEmptyEnumerable.Create(
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.OnCredit),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.DomesticPaymentsAccountNumber)
-                    }
+                    )
                 )
             );
         }
@@ -130,12 +124,11 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
                     ),
-                    payments: new List<NegativePayment>
-                    {
+                    payments: NonEmptyEnumerable.Create(
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.Cash),
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.OnCredit),
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.DomesticPaymentsAccountNumber)
-                    },
+                    ),
                     counterpart: new LocalCounterpart(new GreekTaxIdentifier("090701900"), address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
                 )
             );
@@ -152,13 +145,12 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
                         new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
                     ),
-                    payments: new List<NegativePayment>
-                    {
+                    payments: NonEmptyEnumerable.Create(
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.Cash),
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.OnCredit),
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.DomesticPaymentsAccountNumber)
-                    },
-                    counterpart: new Counterpart(new Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), name: "Name", address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
+                    ),
+                    counterpart: new ForeignCounterpart(new Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), name: "Name", address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
                 )
             );
         }

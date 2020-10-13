@@ -4,7 +4,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
 {
     public class GreekTaxIdentifier : NonEmptyString
     {
-        private static readonly StringLimitation Limitation = new StringLimitation(minLength: 3, maxLength: 3, pattern: "[0-9]{9}$");
+        private static readonly StringLimitation Limitation = new StringLimitation(pattern: "[0-9]{9}$");
 
         public GreekTaxIdentifier(string value)
             : base(value, Limitation)

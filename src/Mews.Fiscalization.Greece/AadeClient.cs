@@ -2,7 +2,7 @@
 using Mews.Fiscalization.Greece.Model;
 using Mews.Fiscalization.Greece.Model.Result;
 using System.Threading.Tasks;
-using Mews.Fiscalization.Core.Model.Collections;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece
 {
@@ -21,7 +21,7 @@ namespace Mews.Fiscalization.Greece
             RestClient = new RestClient(userId, subscriptionKey, environment, logger);
         }
 
-        public async Task<SendInvoicesResult> SendInvoicesAsync(SequentialEnumerableStartingWithOne<Invoice> invoices)
+        public async Task<SendInvoicesResult> SendInvoicesAsync(ISequentialEnumerableStartingWithOne<Invoice> invoices)
         {
             var responseDoc = await RestClient.SendRequestAsync(InvoiceDocumentMapper.GetInvoiceDoc(invoices));
 

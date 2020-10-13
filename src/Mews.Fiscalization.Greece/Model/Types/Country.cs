@@ -1,10 +1,9 @@
-﻿using Mews.Fiscalization.Greece.Dto.Xsd;
-using System;
-
-namespace Mews.Fiscalization.Greece.Model.Types
+﻿namespace Mews.Fiscalization.Greece.Model.Types
 {
     public class Country
     {
+        private const string GreeceCountryCode = "GR";
+
         public Country(CountryCode code, bool isWithinEU)
         {
             Code = code;
@@ -13,5 +12,10 @@ namespace Mews.Fiscalization.Greece.Model.Types
 
         public CountryCode Code { get; }
         public bool IsWithinEU { get; }
+
+        public static Country Greece()
+        {
+            return new Country(new CountryCode(GreeceCountryCode), isWithinEU: true);
+        }
     }
 }

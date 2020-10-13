@@ -1,11 +1,9 @@
 ﻿using Mews.Fiscalization.Greece.Model;
 using System;
 using System.Linq;
-using Mews.Fiscalization.Core.Extensions;
 using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Types;
 using TaxType = Mews.Fiscalization.Greece.Model.TaxType;
-using Mews.Fiscalization.Greece.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Mapper
 {
@@ -89,7 +87,6 @@ namespace Mews.Fiscalization.Greece.Mapper
                 ExchangeRate = invoice.Header.ExchangeRate?.Value ?? 0,
                 CorrelatedInvoicesSpecified = invoice.CorrelatedInvoice.IsNotNull(),
                 CorrelatedInvoices = invoice.CorrelatedInvoice ?? 0
-
             };
 
             if (invoice.Header.CurrencyCode.IsNotNull())
