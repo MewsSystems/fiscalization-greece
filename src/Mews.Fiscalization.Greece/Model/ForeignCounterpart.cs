@@ -8,7 +8,7 @@ namespace Mews.Fiscalization.Greece.Model
         public ForeignCounterpart(Country country, NonEmptyString taxIdentifier = null, NonNegativeInt branch = null, string name = null, Address address = null)
             : base(country, taxIdentifier, branch, name, address)
         {
-            Check.Condition(country.Code != Country.Greece().Code, "Foreign counterpart cannot use greece as country.");
+            Check.Condition(country.Code != Country.Greece().Code, "Foreign counterpart cannot use greece as a country.");
         }
     }
 }
