@@ -1,7 +1,4 @@
 ﻿using Mews.Fiscalization.Core.Model;
-using Mews.Fiscalization.Core.Model.Collections;
-using Mews.Fiscalization.Greece.Model.Collections;
-using Mews.Fiscalization.Greece.Model.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
