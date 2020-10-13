@@ -1,7 +1,7 @@
 ﻿using Mews.Fiscalization.Greece.Dto.Xsd;
 using System.Linq;
-using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Collections;
+using Mews.Fiscalization.Core.Model.Collections;
 
 namespace Mews.Fiscalization.Greece.Model.Result
 {
@@ -9,7 +9,7 @@ namespace Mews.Fiscalization.Greece.Model.Result
     {
         internal SendInvoicesResult(ResponseDoc responseDoc)
         {
-            SendInvoiceResults = SequentialEnumerable.Create(responseDoc.Responses.Select(r => new IndexedItem<SendInvoiceResult>(r.Index, new SendInvoiceResult(
+            SendInvoiceResults = SequentialEnumerableStartingWithOne.Create(responseDoc.Responses.Select(r => new IndexedItem<SendInvoiceResult>(r.Index, new SendInvoiceResult(
                 invoiceIdentifier: r.InvoiceUid,
                 invoiceRegistrationNumber: r.InvoiceMark,
                 invoiceRegistrationNumberSpecified: r.InvoiceMarkSpecified,
@@ -17,7 +17,7 @@ namespace Mews.Fiscalization.Greece.Model.Result
             ))));
         }
 
-        public ISequentialEnumerable<SendInvoiceResult> SendInvoiceResults { get; }
+        public SequentialEnumerableStartingWithOne<SendInvoiceResult> SendInvoiceResults { get; }
 
         private string MapErrorCode(string errorCode, StatusCode statusCode)
         {
