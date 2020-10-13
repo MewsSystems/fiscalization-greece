@@ -22,7 +22,7 @@ namespace Mews.Fiscalization.Greece.Model
         {
             Header = header ?? throw new ArgumentNullException(nameof(header));
             Issuer = issuer ?? throw new ArgumentNullException(nameof(issuer));
-            RevenueItems = SequentialEnumerableStartingWithOne.Create(revenueItems.Select((item, index) => new IndexedItem<Revenue>(index, item)));
+            RevenueItems = SequentialEnumerableStartingWithOne.Create(revenueItems.Select((item, index) => new IndexedItem<Revenue>(index + 1, item)));
             Counterpart = counterpart;
             Payments = payments;
             InvoiceRegistrationNumber = invoiceRegistrationNumber;
