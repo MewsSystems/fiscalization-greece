@@ -11,7 +11,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
         {
         }
 
-        public static bool IsValid(string value)
+        public new static bool IsValid(string value)
         {
             return IsValid(value, Limitation);
         }
