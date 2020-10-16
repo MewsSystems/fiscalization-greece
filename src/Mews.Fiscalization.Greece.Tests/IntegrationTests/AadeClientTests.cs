@@ -64,7 +64,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             var invoices = SequentialEnumerableStartingWithOne.FromPreordered<Invoice>(new List<Invoice>
             {
                 new SalesInvoice(
-                    issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
+                    issuer: new LocalInvoiceParty(new GreekTaxIdentifier(UserVatNumber)),
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(new List<NonNegativeRevenue>
                     {
@@ -77,7 +77,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.OnCredit),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.DomesticPaymentsAccountNumber)
                     ),
-                    counterpart: new LocalCounterpart(new GreekTaxIdentifier("090701900"))
+                    counterpart: new LocalInvoiceParty(new GreekTaxIdentifier("090701900"))
                 )
             });
 
@@ -95,7 +95,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             var negativeInvoice = SequentialEnumerableStartingWithOne.FromPreordered<Invoice>(new List<Invoice>
             {
                 new CreditInvoice(
-                    issuer: new LocalCounterpart(new GreekTaxIdentifier(UserVatNumber)),
+                    issuer: new LocalInvoiceParty(new GreekTaxIdentifier(UserVatNumber)),
                     correlatedInvoice: correlatedInvoice,
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50021"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(new List<NegativeRevenue>
@@ -108,7 +108,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NegativePayment(new NegativeAmount(-133.06m), PaymentType.Cash),
                         new NegativePayment(new NegativeAmount(-66.53m), PaymentType.DomesticPaymentsAccountNumber)
                     ),
-                    counterpart: new LocalCounterpart(new GreekTaxIdentifier("090701900"), new NonNegativeInt(0), address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
+                    counterpart: new LocalInvoiceParty(new GreekTaxIdentifier("090701900"), new NonNegativeInt(0), address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
                 )
             });
 

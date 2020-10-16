@@ -8,12 +8,12 @@ namespace Mews.Fiscalization.Greece.Model
     {
         public Invoice(
             InvoiceHeader header,
-            LocalCounterpart issuer,
+            LocalInvoiceParty issuer,
             ISequentialEnumerableStartingWithOne<Revenue> revenueItems,
             INonEmptyEnumerable<Payment> payments,
             long? invoiceRegistrationNumber = null,
             long? cancelledByInvoiceRegistrationNumber = null,
-            Counterpart counterpart = null,
+            InvoiceParty counterpart = null,
             long? correlatedInvoice = null)
         {
             Header = header ?? throw new ArgumentNullException(nameof(header));
@@ -33,13 +33,13 @@ namespace Mews.Fiscalization.Greece.Model
 
         public InvoiceHeader Header { get; }
 
-        public LocalCounterpart Issuer { get; }
+        public LocalInvoiceParty Issuer { get; }
 
         public ISequentialEnumerableStartingWithOne<Revenue> RevenueItems { get; }
 
         public INonEmptyEnumerable<Payment> Payments { get; }
 
-        public Counterpart Counterpart { get; }
+        public InvoiceParty Counterpart { get; }
 
         public long? InvoiceRegistrationNumber { get; }
 

@@ -41,7 +41,7 @@ namespace Mews.Fiscalization.Greece.Mapper
             };
         }
 
-        private static Dto.Xsd.InvoiceParty GetInvoiceParty(Counterpart counterpart)
+        private static Dto.Xsd.InvoiceParty GetInvoiceParty(InvoiceParty counterpart)
         {
             if (counterpart != null)
             {

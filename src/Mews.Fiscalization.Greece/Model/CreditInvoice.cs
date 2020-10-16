@@ -7,9 +7,9 @@ namespace Mews.Fiscalization.Greece.Model
     {
         public CreditInvoice(
             InvoiceHeader header,
-            LocalCounterpart issuer,
+            LocalInvoiceParty issuer,
             ISequentialEnumerableStartingWithOne<NegativeRevenue> revenueItems,
-            Counterpart counterpart,
+            InvoiceParty counterpart,
             INonEmptyEnumerable<NegativePayment> payments,
             long? invoiceRegistrationNumber = null,
             long? cancelledByInvoiceRegistrationNumber = null,

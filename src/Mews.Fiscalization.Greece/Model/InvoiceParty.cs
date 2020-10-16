@@ -4,9 +4,9 @@ using Mews.Fiscalization.Greece.Model.Types;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public abstract class Counterpart
+    public abstract class InvoiceParty
     {
-        public Counterpart(Country country, NonEmptyString taxIdentifier = null, NonNegativeInt branch = null, string name = null, Address address = null)
+        public InvoiceParty(Country country, NonEmptyString taxIdentifier = null, NonNegativeInt branch = null, string name = null, Address address = null)
         {
             TaxIdentifier = taxIdentifier ?? new NonEmptyString("0");
             Country = country ?? throw new ArgumentNullException(nameof(country));

@@ -3,9 +3,9 @@ using Mews.Fiscalization.Greece.Model.Types;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class LocalCounterpart : Counterpart
+    public class LocalInvoiceParty : InvoiceParty
     {
-        public LocalCounterpart(GreekTaxIdentifier taxIdentifier, NonNegativeInt branch = null, string name = null, Address address = null)
+        public LocalInvoiceParty(GreekTaxIdentifier taxIdentifier, NonNegativeInt branch = null, string name = null, Address address = null)
             : base(Country.Greece, taxIdentifier: taxIdentifier, branch, name ,address)
         {
         }

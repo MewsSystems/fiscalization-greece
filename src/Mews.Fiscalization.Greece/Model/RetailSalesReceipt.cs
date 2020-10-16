@@ -6,7 +6,7 @@ namespace Mews.Fiscalization.Greece.Model
     {
         public RetailSalesReceipt(
             InvoiceHeader header,
-            LocalCounterpart issuer,
+            LocalInvoiceParty issuer,
             ISequentialEnumerableStartingWithOne<NonNegativeRevenue> revenueItems,
             INonEmptyEnumerable<NonNegativePayment> payments,
             long? invoiceRegistrationNumber = null,
