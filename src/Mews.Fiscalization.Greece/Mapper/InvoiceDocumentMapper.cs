@@ -4,6 +4,7 @@ using System.Linq;
 using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model.Types;
 using TaxType = Mews.Fiscalization.Greece.Model.TaxType;
+using System.Text.RegularExpressions;
 
 namespace Mews.Fiscalization.Greece.Mapper
 {
@@ -35,7 +36,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 InvoiceDetails = invoice.RevenueItems.Select(invoiceDetail => GetInvoiceDetail(invoice, invoiceDetail)).ToArray(),
                 PaymentMethods = invoice.Payments?.Select(paymentMethod => new Dto.Xsd.PaymentMethod
                 {
-                    Amount = paymentMethod.Amount.Value,
+                    Amount = Math.Abs(paymentMethod.Amount.Value),
                     PaymentMethodType = MapPaymentMethodType(paymentMethod.PaymentType)
                 }).ToArray()
             };
@@ -103,8 +104,8 @@ namespace Mews.Fiscalization.Greece.Mapper
             var invoiceDetail = new Dto.Xsd.InvoiceDetail
             {
                 LineNumber = indexedRevenueItem.Index,
-                NetValue = revenueItem.NetValue.Value,
-                VatAmount = revenueItem.VatValue.Value,
+                NetValue = Math.Abs(revenueItem.NetValue.Value),
+                VatAmount = Math.Abs(revenueItem.VatValue.Value),
                 VatCategory = MapVatCategory(revenueItem.TaxType),
                 IncomeClassification = new[] { GetIncomeClassification(invoice, revenueItem) }
             };
@@ -122,8 +123,8 @@ namespace Mews.Fiscalization.Greece.Mapper
         {
             var invoiceSummary = new Dto.Xsd.InvoiceSummary
             {
-                TotalNetValue = invoice.RevenueItems.Sum(x => x.Value.NetValue.Value),
-                TotalVatAmount = invoice.RevenueItems.Sum(x => x.Value.VatValue.Value)
+                TotalNetValue = Math.Abs(invoice.RevenueItems.Sum(x => x.Value.NetValue.Value)),
+                TotalVatAmount = Math.Abs(invoice.RevenueItems.Sum(x => x.Value.VatValue.Value))
             };
 
             invoiceSummary.IncomeClassification = invoice.RevenueItems.GroupBy(
@@ -132,7 +133,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 {
                     ClassificationCategory = MapRevenueClassification(invoice, key).Category,
                     ClassificationType = MapRevenueClassification(invoice, key).Type,
-                    Amount = revenueItems.Sum(i => i.Value.NetValue.Value)
+                    Amount = Math.Abs(revenueItems.Sum(i => i.Value.NetValue.Value))
                 }
             ).ToArray();
 
@@ -148,7 +149,7 @@ namespace Mews.Fiscalization.Greece.Mapper
 
             return new Dto.Xsd.IncomeClassification
             {
-                Amount = revenue.NetValue.Value,
+                Amount = Math.Abs(revenue.NetValue.Value),
                 ClassificationCategory = revenueClassification.Category,
                 ClassificationType = revenueClassification.Type
             };

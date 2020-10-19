@@ -18,7 +18,7 @@ namespace Mews.Fiscalization.Greece.Model
         {
             Header = header ?? throw new ArgumentNullException(nameof(header));
             Issuer = issuer ?? throw new ArgumentNullException(nameof(issuer));
-            RevenueItems = revenueItems  ?? throw new ArgumentNullException(nameof(revenueItems));;
+            RevenueItems = revenueItems  ?? throw new ArgumentNullException(nameof(revenueItems));
             Payments = payments ?? throw new ArgumentNullException(nameof(payments));
             Counterpart = counterpart;
             InvoiceRegistrationNumber = invoiceRegistrationNumber;
