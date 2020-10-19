@@ -1,4 +1,5 @@
-﻿using Mews.Fiscalization.Greece.Model.Types;
+﻿using Mews.Fiscalization.Core.Model;
+using Mews.Fiscalization.Greece.Model.Types;
 
 namespace Mews.Fiscalization.Greece.Model
 {
@@ -6,7 +7,7 @@ namespace Mews.Fiscalization.Greece.Model
     {
         public NegativeRevenue(
             NegativeAmount netValue,
-            NegativeAmount vatValue,
+            NonPositiveAmount vatValue,
             TaxType taxType,
             RevenueType revenueType,
             VatExemptionType? vatExemption = null)

@@ -100,9 +100,9 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50021"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(new List<NegativeRevenue>
                     {
-                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Products),
-                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Services),
-                        new NegativeRevenue(new NegativeAmount(-53.65m), new NegativeAmount(-12.88m), TaxType.Vat6, RevenueType.Other)
+                        new NegativeRevenue(new NegativeAmount(-53.65m), new NonPositiveAmount(-12.88m), TaxType.Vat6, RevenueType.Products),
+                        new NegativeRevenue(new NegativeAmount(-53.65m), new NonPositiveAmount(-12.88m), TaxType.Vat6, RevenueType.Services),
+                        new NegativeRevenue(new NegativeAmount(-53.65m), new NonPositiveAmount(-12.88m), TaxType.Vat6, RevenueType.Other)
                     }),
                     payments: NonEmptyEnumerable.Create(
                         new NegativePayment(new NegativeAmount(-133.06m), PaymentType.Cash),

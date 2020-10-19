@@ -16,6 +16,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Mews.Fiscalization.Core" Version="1.8.0" />
+      <PackageReference Include="Mews.Fiscalization.Core" Version="1.9.0" />
     </ItemGroup>
 </Project>
