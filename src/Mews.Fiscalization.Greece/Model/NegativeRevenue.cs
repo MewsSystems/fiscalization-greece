@@ -6,7 +6,7 @@ namespace Mews.Fiscalization.Greece.Model
     {
         public NegativeRevenue(
             NegativeAmount netValue,
-            NegativeAmount vatValue,
+            NonPositiveAmount vatValue,
             TaxType taxType,
             RevenueType revenueType,
             VatExemptionType? vatExemption = null)

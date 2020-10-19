@@ -130,9 +130,9 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(new List<NegativeRevenue>
                     {
-                        new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Products),
-                        new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
-                        new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
+                        new NegativeRevenue(new NegativeAmount(-88.50m), new NonPositiveAmount(-11.50m), TaxType.Vat13, RevenueType.Products),
+                        new NegativeRevenue(new NegativeAmount(-88.50m), new NonPositiveAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
+                        new NegativeRevenue(new NegativeAmount(-88.50m), new NonPositiveAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
                     }),
                     payments: NonEmptyEnumerable.Create(
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.Cash),
@@ -153,9 +153,9 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(new List<NegativeRevenue>
                     {
-                        new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Products),
-                        new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
-                        new NegativeRevenue(new NegativeAmount(-88.50m), new NegativeAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
+                        new NegativeRevenue(new NegativeAmount(-88.50m), new NonPositiveAmount(-11.50m), TaxType.Vat13, RevenueType.Products),
+                        new NegativeRevenue(new NegativeAmount(-88.50m), new NonPositiveAmount(-11.50m), TaxType.Vat13, RevenueType.Services),
+                        new NegativeRevenue(new NegativeAmount(-88.50m), new NonPositiveAmount(-11.50m), TaxType.Vat13, RevenueType.Other)
                     }),
                     payments: NonEmptyEnumerable.Create(
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.Cash),

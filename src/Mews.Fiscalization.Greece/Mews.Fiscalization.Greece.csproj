@@ -7,7 +7,7 @@
         <Authors>Mews Systems</Authors>
         <Company>Mews Systems</Company>
         <PackageTags>fiscalization greece mydata</PackageTags>
-        <PackageVersion>0.0.7-prerelease</PackageVersion>
+        <PackageVersion>0.0.8-prerelease</PackageVersion>
 		<PackageProjectUrl>https://github.com/MewsSystems/fiscalization-greece</PackageProjectUrl>
         <License>https://github.com/MewsSystems/fiscalization-greece/blob/master/LICENSE</License>
         <RepositoryUrl>https://github.com/MewsSystems/fiscalization-greece</RepositoryUrl>
@@ -16,6 +16,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Mews.Fiscalization.Core" Version="1.8.0" />
+      <PackageReference Include="Mews.Fiscalization.Core" Version="1.10.0" />
     </ItemGroup>
 </Project>
