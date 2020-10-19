@@ -29,7 +29,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                 CreditInvoiceNonAssociatedForForeignCompany("CZ", true),
                 CreditInvoiceNonAssociatedForForeignCompany("US", false)
             };
-            return invoices.Select(i => new [] { i });
+            return invoices.Select(i => new[] { i });
         }
 
         private static ISequentialEnumerable<Invoice> RetailSalesReceiptForCustomer()
@@ -108,14 +108,14 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(new List<NonNegativeRevenue>
                     {
-                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Products),
-                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Services),
-                        new NonNegativeRevenue(new NonNegativeAmount(88.50m), new NonNegativeAmount(11.50m), TaxType.Vat13, RevenueType.Other)
+                        new NonNegativeRevenue(new NonNegativeAmount(20.50m), new NonNegativeAmount(10.50m), TaxType.Vat13, RevenueType.Products),
+                        new NonNegativeRevenue(new NonNegativeAmount(20.50m), new NonNegativeAmount(10.50m), TaxType.Vat13, RevenueType.Services),
+                        new NonNegativeRevenue(new NonNegativeAmount(20.50m), new NonNegativeAmount(10.50m), TaxType.Vat13, RevenueType.Other)
                     }),
                     payments: NonEmptyEnumerable.Create(
-                        new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
-                        new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.OnCredit),
-                        new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.DomesticPaymentsAccountNumber)
+                        new NonNegativePayment(new NonNegativeAmount(31m), PaymentType.Cash),
+                        new NonNegativePayment(new NonNegativeAmount(31m), PaymentType.OnCredit),
+                        new NonNegativePayment(new NonNegativeAmount(31m), PaymentType.DomesticPaymentsAccountNumber)
                     )
                 )
             });

@@ -23,6 +23,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
         }
 
 
+        [Fact]
         public async Task CheckUserCredentials()
         {
             // Arrange
@@ -36,6 +37,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             Assert.True(response.Success.IsAuthorized);
         }
 
+        [Theory]
         [MemberData(nameof(AadeTestInvoicesData.GetInvoices), MemberType = typeof(AadeTestInvoicesData))]
         public async Task ValidInvoicesWork(SequentialEnumerableStartingWithOne<Invoice> invoices)
         {
@@ -50,6 +52,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             Assert.True(response.SendInvoiceResults.Single().Value.IsSuccess);
         }
 
+        [Fact]
         public async Task ValidNegativeInvoiceWorks()
         {
             // Arrange
@@ -117,4 +120,3 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
         }
     }
 }
-
