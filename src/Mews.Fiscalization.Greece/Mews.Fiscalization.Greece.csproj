@@ -12,6 +12,7 @@
     <License>https://github.com/MewsSystems/fiscalization-greece/blob/master/LICENSE</License>
     <RepositoryUrl>https://github.com/MewsSystems/fiscalization-greece</RepositoryUrl>
     <Description>Client for MyData - Greek e-books platform.</Description>
+    <Icon>https://raw.githubusercontent.com/msigut/eet/master/receipt.png</Icon>
     <Version>1.0.0</Version>
   </PropertyGroup>
   
