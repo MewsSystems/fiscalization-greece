@@ -6,6 +6,9 @@
 This library is providing a client to submit data to greek fiscal authorities. For more info see https://www.aade.gr/mydata.
 This is still work in progress as it appears that not all use-cases are covered by the API. Therefore we do not recommend using this in production environments.
 
+## Dependencies
+This package uses [Mews.Fiscalization.Core](https://github.com/MewsSystems/fiscalization-core/) for data types, validations and other types of functionality shared across our fiscalization libraries.
+
 ## Key features
 - No Greek abbreviations.
 - Early data validation.
