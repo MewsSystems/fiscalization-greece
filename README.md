@@ -2,6 +2,9 @@
 
 # Mews.Fiscalization.Greece
 
+## Description
+This library is providing a client to submit data to greek fiscal authorities - https://www.aade.gr/mydata.
+
 ## Key features
 - No Greek abbreviations.
 - Early data validation.
