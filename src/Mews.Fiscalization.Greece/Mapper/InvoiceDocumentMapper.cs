@@ -24,10 +24,6 @@ namespace Mews.Fiscalization.Greece.Mapper
         {
             return new Dto.Xsd.Invoice
             {
-                InvoiceMarkSpecified = invoice.InvoiceRegistrationNumber.IsNotNull(),
-                InvoiceMark = invoice.InvoiceRegistrationNumber ?? 0,
-                InvoiceCancelationMarkSpecified = invoice.CanceledByInvoiceRegistrationNumber.IsNotNull(),
-                InvoiceCancelationMark = invoice.CanceledByInvoiceRegistrationNumber ?? 0,
                 InvoiceId = invoice.Header.InvoiceIdentifier,
                 InvoiceIssuer = GetInvoiceParty(invoice.Issuer),
                 InvoiceCounterpart = GetInvoiceParty(invoice.Counterpart),

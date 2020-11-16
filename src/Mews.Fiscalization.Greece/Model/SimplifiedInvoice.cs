@@ -9,10 +9,8 @@ namespace Mews.Fiscalization.Greece.Model
             InvoiceHeader header,
             LocalInvoiceParty issuer,
             ISequentialEnumerableStartingWithOne<NonNegativeRevenue> revenueItems,
-            INonEmptyEnumerable<NonNegativePayment> payments,
-            long? invoiceRegistrationNumber = null,
-            long? cancelledByInvoiceRegistrationNumber = null)
-            : base(header, issuer, revenueItems, payments, invoiceRegistrationNumber, cancelledByInvoiceRegistrationNumber)
+            INonEmptyEnumerable<NonNegativePayment> payments)
+            : base(header, issuer, revenueItems, payments)
         {
             if (header.CurrencyCode.IsNull() || header.CurrencyCode.Value == "EUR")
             {

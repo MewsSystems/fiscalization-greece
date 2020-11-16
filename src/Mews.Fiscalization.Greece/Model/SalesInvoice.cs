@@ -10,10 +10,8 @@ namespace Mews.Fiscalization.Greece.Model
             LocalInvoiceParty issuer,
             ISequentialEnumerableStartingWithOne<NonNegativeRevenue> revenueItems,
             InvoiceParty counterpart,
-            INonEmptyEnumerable<NonNegativePayment> payments,
-            long? invoiceRegistrationNumber = null,
-            long? cancelledByInvoiceRegistrationNumber = null)
-            : base(header, issuer, revenueItems, payments, invoiceRegistrationNumber, cancelledByInvoiceRegistrationNumber, counterpart)
+            INonEmptyEnumerable<NonNegativePayment> payments)
+            : base(header, issuer, revenueItems, payments, counterpart)
         {
             if (counterpart == null)
             {

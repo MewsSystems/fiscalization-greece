@@ -11,8 +11,6 @@ namespace Mews.Fiscalization.Greece.Model
             LocalInvoiceParty issuer,
             ISequentialEnumerableStartingWithOne<Revenue> revenueItems,
             INonEmptyEnumerable<Payment> payments,
-            long? invoiceRegistrationNumber = null,
-            long? cancelledByInvoiceRegistrationNumber = null,
             InvoiceParty counterpart = null,
             long? correlatedInvoice = null)
         {
@@ -21,8 +19,6 @@ namespace Mews.Fiscalization.Greece.Model
             RevenueItems = revenueItems  ?? throw new ArgumentNullException(nameof(revenueItems));
             Payments = payments ?? throw new ArgumentNullException(nameof(payments));
             Counterpart = counterpart;
-            InvoiceRegistrationNumber = invoiceRegistrationNumber;
-            CanceledByInvoiceRegistrationNumber = cancelledByInvoiceRegistrationNumber;
             CorrelatedInvoice = correlatedInvoice;
 
             if (!RevenueItems.Any())
@@ -40,10 +36,6 @@ namespace Mews.Fiscalization.Greece.Model
         public INonEmptyEnumerable<Payment> Payments { get; }
 
         public InvoiceParty Counterpart { get; }
-
-        public long? InvoiceRegistrationNumber { get; }
-
-        public long? CanceledByInvoiceRegistrationNumber { get; }
 
         public long? CorrelatedInvoice { get; }
     }

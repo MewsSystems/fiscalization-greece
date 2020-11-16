@@ -11,10 +11,8 @@ namespace Mews.Fiscalization.Greece.Model
             ISequentialEnumerableStartingWithOne<NegativeRevenue> revenueItems,
             InvoiceParty counterpart,
             INonEmptyEnumerable<NegativePayment> payments,
-            long? invoiceRegistrationNumber = null,
-            long? cancelledByInvoiceRegistrationNumber = null,
             long? correlatedInvoice = null)
-            : base(header, issuer, revenueItems, payments, invoiceRegistrationNumber, cancelledByInvoiceRegistrationNumber, counterpart, correlatedInvoice)
+            : base(header, issuer, revenueItems, payments, counterpart, correlatedInvoice)
         {
             if (counterpart == null)
             {
