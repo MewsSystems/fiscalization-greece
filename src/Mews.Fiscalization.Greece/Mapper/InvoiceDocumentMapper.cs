@@ -215,7 +215,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                     }
                 }
 
-                return (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices);
+                return (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherOrdinaryIncome);
             }
 
             throw new ArgumentException($"Cannot map revenue type to a pair of {nameof(Dto.Xsd.IncomeClassificationCategory)} and {nameof(Dto.Xsd.IncomeClassificationType)}.");

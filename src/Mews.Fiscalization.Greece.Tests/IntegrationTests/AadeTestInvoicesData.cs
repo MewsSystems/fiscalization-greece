@@ -13,7 +13,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
         static AadeTestInvoicesData()
         {
-            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "INSERT_USER_VAT_NUMBER";
+            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "800356135";
         }
 
         public static IEnumerable<object[]> GetInvoices()
@@ -85,9 +85,9 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                     header: new InvoiceHeader(new LimitedString1To50("0"), new LimitedString1To50("50020"), DateTime.Now, currencyCode: new CurrencyCode("EUR")),
                     revenueItems: SequentialEnumerableStartingWithOne.FromPreordered(new List<NonNegativeRevenue>
                     {
-                        new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Products),
-                        new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Services),
-                        new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.WithoutVat, RevenueType.Other)
+                        new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.Vat0, RevenueType.Products, VatExemptionType.VatIncludedArticle43),
+                        new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.Vat0, RevenueType.Services, VatExemptionType.VatIncludedArticle43),
+                        new NonNegativeRevenue(new NonNegativeAmount(100m), new NonNegativeAmount(0m), TaxType.Vat0, RevenueType.Other, VatExemptionType.VatIncludedArticle43)
                     }),
                     payments: NonEmptyEnumerable.Create(
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.Cash),
