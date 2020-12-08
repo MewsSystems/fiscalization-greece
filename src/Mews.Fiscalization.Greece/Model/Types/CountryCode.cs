@@ -27,7 +27,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
             return IsValid(value, Limitation.ToEnumerable()) && Enum.TryParse<Dto.Xsd.Country>(value, out _);
         }
 
-        public new static bool IsValid(string value, IEnumerable<StringLimitation> limitations)
+        protected new static bool IsValid(string value, IEnumerable<StringLimitation> limitations)
         {
             return LimitedString.IsValid(value, Limitation.Concat(limitations));
         }

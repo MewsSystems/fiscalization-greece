@@ -17,7 +17,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
             return IsValid(value, Limitation.ToEnumerable());
         }
 
-        public new static bool IsValid(string value, IEnumerable<StringLimitation> limitations)
+        protected new static bool IsValid(string value, IEnumerable<StringLimitation> limitations)
         {
             return NonEmptyString.IsValid(value, Limitation.Concat(limitations));
         }

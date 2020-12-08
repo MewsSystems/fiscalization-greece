@@ -17,7 +17,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
             return IsValid(value, Limitation.ToEnumerable());
         }
 
-        public new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
+        protected new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
         {
             return Amount.IsValid(value, Limitation.Concat(limitations));
         }

@@ -22,7 +22,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
             return IsValid(value, Limitation.ToEnumerable());
         }
 
-        public new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
+        protected new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
         {
             return LimitedDecimal.IsValid(value, Limitation.Concat(limitations));
         }
