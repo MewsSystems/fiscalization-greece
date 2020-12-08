@@ -12,13 +12,23 @@ namespace Mews.Fiscalization.Greece.Model.Types
         private static readonly StringLimitation Limitation = new StringLimitation(minLength: 3, maxLength: 3, allowedValues: AllowedValues);
 
         public CurrencyCode(string value)
-            : base(value, Limitation)
+            : base(value, Limitation.ToEnumerable())
+        {
+        }
+
+        protected CurrencyCode(string value, IEnumerable<StringLimitation> limitations)
+            : base(value, Limitation.Concat(limitations))
         {
         }
 
         public static bool IsValid(string value)
         {
-            return IsValid(value, Limitation);
+            return IsValid(value, Limitation.ToEnumerable());
+        }
+
+        public new static bool IsValid(string value, IEnumerable<StringLimitation> limitations)
+        {
+            return LimitedString.IsValid(value, Limitation.Concat(limitations));
         }
     }
 }

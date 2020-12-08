@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model.Types
@@ -8,7 +9,7 @@ namespace Mews.Fiscalization.Greece.Model.Types
         private static readonly StringLimitation Limitation = new StringLimitation(minLength: 2, maxLength: 2);
 
         public CountryCode(string value)
-            : base(value, Limitation)
+            : this(value, Limitation.ToEnumerable())
         {
             if (!Enum.TryParse<Dto.Xsd.Country>(value, out _))
             {
@@ -16,9 +17,19 @@ namespace Mews.Fiscalization.Greece.Model.Types
             }
         }
 
+        protected CountryCode(string value, IEnumerable<StringLimitation> limitations)
+            : base(value, Limitation.Concat(limitations))
+        {
+        }
+
         public static bool IsValid(string value)
         {
-            return LimitedString.IsValid(value, Limitation) && Enum.TryParse<Dto.Xsd.Country>(value, out _);
+            return IsValid(value, Limitation.ToEnumerable()) && Enum.TryParse<Dto.Xsd.Country>(value, out _);
+        }
+
+        public new static bool IsValid(string value, IEnumerable<StringLimitation> limitations)
+        {
+            return LimitedString.IsValid(value, Limitation.Concat(limitations));
         }
     }
 }

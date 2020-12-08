@@ -7,17 +7,22 @@ namespace Mews.Fiscalization.Greece.Model.Types
     {
         private static readonly DecimalLimitation Limitation = new DecimalLimitation(maxDecimalPlaces: 2);
 
-        public Amount(decimal value, DecimalLimitation limitation)
-            : base(value, Limitation.Concat(limitation.ToEnumerable()))
+        public Amount(decimal value)
+            : this(value, Limitation.ToEnumerable())
         {
         }
 
-        protected new static bool IsValid(decimal value, DecimalLimitation limitation)
+        protected Amount(decimal value, IEnumerable<DecimalLimitation> limitations)
+            : base(value, Limitation.Concat(limitations))
         {
-            return IsValid(value, limitation.ToEnumerable());
         }
 
-        protected new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
+        public static bool IsValid(decimal value)
+        {
+            return IsValid(value, Limitation.ToEnumerable());
+        }
+
+        public new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
         {
             return LimitedDecimal.IsValid(value, Limitation.Concat(limitations));
         }

@@ -174,7 +174,7 @@ namespace Mews.Fiscalization.Greece.Mapper
 
             if (invoice is SalesInvoice)
             {
-                Country country = invoice.Counterpart.Country;
+                Model.Types.Country country = invoice.Counterpart.Country;
                 if (country.Code.Value == GreeceCountryCode)
                 {
                     return Dto.Xsd.InvoiceType.SalesInvoice;
@@ -224,7 +224,7 @@ namespace Mews.Fiscalization.Greece.Mapper
             {
                 if (invoice is SalesInvoice)
                 {
-                    Country country = invoice.Counterpart.Country;
+                    Model.Types.Country country = invoice.Counterpart.Country;
                     if (country.Code.Value == GreeceCountryCode)
                     {
                         return Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices;

@@ -94,7 +94,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.OnCredit),
                         new NonNegativePayment(new NonNegativeAmount(100m), PaymentType.DomesticPaymentsAccountNumber)
                     ),
-                    counterpart: new ForeignInvoiceParty(new Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), new NonNegativeInt(0), "Name", new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
+                    counterpart: new ForeignInvoiceParty(new Model.Types.Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), new NonNegativeInt(0), "Name", new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
                 )
             });
         }
@@ -162,7 +162,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.OnCredit),
                         new NegativePayment(new NegativeAmount(-100m), PaymentType.DomesticPaymentsAccountNumber)
                     ),
-                    counterpart: new ForeignInvoiceParty(new Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), name: "Name", address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
+                    counterpart: new ForeignInvoiceParty(new Model.Types.Country(new CountryCode(countryCode), isWithinEU: isWithinEU), new NonEmptyString("12348765"), name: "Name", address: new Address(postalCode: new NonEmptyString("12"), city: new NonEmptyString("City")))
                 )
             });
         }
