@@ -3,12 +3,12 @@ using Mews.Fiscalization.Greece.Model;
 using Mews.Fiscalization.Greece.Model.Result;
 using Mews.Fiscalization.Greece.Model.Types;
 using System;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Mews.Fiscalization.Greece
 {
@@ -80,8 +80,8 @@ namespace Mews.Fiscalization.Greece
 
         internal Task<CheckUserCredentialsResult> CheckUserCredentialsAsync()
         {
-            var queryString = HttpUtility.ParseQueryString(string.Empty);
-            queryString["mark"] = "mark";
+            var queryString = new NameValueCollection();
+            queryString.Add("mark", "mark");
 
             var endpointUri = new Uri(BaseUri, $"{GetRequestDocsEndpointMethodName}?{queryString}");
 

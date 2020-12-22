@@ -1,25 +1,34 @@
-﻿using System.Collections.Generic;
-using Mews.Fiscalization.Core.Model;
+﻿using FuncSharp;
 
-namespace Mews.Fiscalization.Greece.Model.Types
+namespace Mews.Fiscalization.Greece.Model
 {
-    public abstract class Amount : LimitedDecimal
+    public sealed class Amount : Coproduct3<NonPositiveAmount, NonNegativeAmount, NegativeAmount>
     {
-        private static readonly DecimalLimitation Limitation = new DecimalLimitation(maxDecimalPlaces: 2);
-
-        public Amount(decimal value, DecimalLimitation limitation)
-            : base(value, Limitation.Concat(limitation.ToEnumerable()))
+        public Amount(NonPositiveAmount firstValue)
+            : base(firstValue)
         {
         }
 
-        protected new static bool IsValid(decimal value, DecimalLimitation limitation)
+        public Amount(NonNegativeAmount secondValue)
+            : base(secondValue)
         {
-            return IsValid(value, limitation.ToEnumerable());
         }
 
-        protected new static bool IsValid(decimal value, IEnumerable<DecimalLimitation> limitations)
+        public Amount(NegativeAmount thirdValue)
+            : base(thirdValue)
         {
-            return LimitedDecimal.IsValid(value, Limitation.Concat(limitations));
+        }
+
+        public decimal Value
+        {
+            get
+            {
+                return Match(
+                    nonPositiveAmount => nonPositiveAmount.Value,
+                    nonNegativeAmount => nonNegativeAmount.Value,
+                    negativeAmount => negativeAmount.Value
+                );
+            }
         }
     }
 }

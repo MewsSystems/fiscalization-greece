@@ -1,42 +1,106 @@
-﻿using Mews.Fiscalization.Core.Model;
-using System;
-using System.Linq;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public abstract class Invoice
+    public abstract class Invoice : Coproduct4<SalesInvoice, SimplifiedInvoice, RetailSalesReceipt, CreditInvoice>
     {
-        public Invoice(
-            InvoiceHeader header,
-            LocalInvoiceParty issuer,
-            ISequentialEnumerableStartingWithOne<Revenue> revenueItems,
-            INonEmptyEnumerable<Payment> payments,
-            InvoiceParty counterpart = null,
-            long? correlatedInvoice = null)
+        public Invoice(SalesInvoice firstValue)
+            : base(firstValue)
         {
-            Header = header ?? throw new ArgumentNullException(nameof(header));
-            Issuer = issuer ?? throw new ArgumentNullException(nameof(issuer));
-            RevenueItems = revenueItems  ?? throw new ArgumentNullException(nameof(revenueItems));
-            Payments = payments ?? throw new ArgumentNullException(nameof(payments));
-            Counterpart = counterpart;
-            CorrelatedInvoice = correlatedInvoice;
+        }
 
-            if (!RevenueItems.Any())
+        public Invoice(SimplifiedInvoice firstValue)
+            : base(firstValue)
+        {
+        }
+
+        public Invoice(RetailSalesReceipt firstValue)
+            : base(firstValue)
+        {
+        }
+
+        public Invoice(CreditInvoice firstValue)
+            : base(firstValue)
+        {
+        }
+
+        public InvoiceHeader Header
+        {
+            get
             {
-                throw new ArgumentException($"Minimal count of {nameof(revenueItems)} is 1.");
+                return Match(
+                    salesInvoice => salesInvoice.Header,
+                    simplifiedInvoice => simplifiedInvoice.Header,
+                    retailSalesReceipt => retailSalesReceipt.Header,
+                    creditInvoice => creditInvoice.Header
+                );
             }
         }
 
-        public InvoiceHeader Header { get; }
+        public LocalInvoiceParty Issuer
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => salesInvoice.Issuer,
+                    simplifiedInvoice => simplifiedInvoice.Issuer,
+                    retailSalesReceipt => retailSalesReceipt.Issuer,
+                    creditInvoice => creditInvoice.Issuer
+                );
+            }
+        }
 
-        public LocalInvoiceParty Issuer { get; }
+        public InvoiceParty Counterpart
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => salesInvoice.Counterpart,
+                    simplifiedInvoice => null,
+                    retailSalesReceipt => null,
+                    creditInvoice => creditInvoice.Counterpart
+                );
+            }
+        }
 
-        public ISequentialEnumerableStartingWithOne<Revenue> RevenueItems { get; }
+        public INonEmptyEnumerable<Payment> Payments
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => salesInvoice.Payments,
+                    simplifiedInvoice => simplifiedInvoice.Payments,
+                    retailSalesReceipt => retailSalesReceipt.Payments,
+                    creditInvoice => creditInvoice.Payments
+                );
+            }
+        }
 
-        public INonEmptyEnumerable<Payment> Payments { get; }
+        public long? CorrelatedInvoice
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => null,
+                    simplifiedInvoice => null,
+                    retailSalesReceipt => null,
+                    creditInvoice => CorrelatedInvoice
+                );
+            }
+        }
 
-        public InvoiceParty Counterpart { get; }
-
-        public long? CorrelatedInvoice { get; }
+        public ISequenceStartingWithOne<Revenue> RevenueItems
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => salesInvoice.RevenueItems,
+                    simplifiedInvoice => simplifiedInvoice.RevenueItems,
+                    retailSalesReceipt => retailSalesReceipt.RevenueItems,
+                    creditInvoice => creditInvoice.RevenueItems
+                );
+            }
+        }
     }
 }

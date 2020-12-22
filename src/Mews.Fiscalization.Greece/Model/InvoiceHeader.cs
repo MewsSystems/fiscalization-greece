@@ -7,24 +7,24 @@ namespace Mews.Fiscalization.Greece.Model
     public class InvoiceHeader
     {
         public InvoiceHeader(
-            LimitedString1To50 invoiceSeries,
-            LimitedString1To50 invoiceSerialNumber,
+            String1To50 invoiceSeries,
+            String1To50 invoiceSerialNumber,
             DateTime invoiceIssueDate,
             string invoiceIdentifier = null,
             CurrencyCode currencyCode = null,
             ExchangeRate exchangeRate = null)
         {
-            InvoiceSeries = invoiceSeries ?? throw new ArgumentNullException(nameof(invoiceSeries));
-            InvoiceSerialNumber = invoiceSerialNumber ?? throw new ArgumentNullException(nameof(invoiceSerialNumber));
+            InvoiceSeries = Check.IsNotNull(invoiceSeries, nameof(invoiceSeries));
+            InvoiceSerialNumber = Check.IsNotNull(invoiceSerialNumber, nameof(invoiceSerialNumber));
             InvoiceIssueDate = invoiceIssueDate;
             InvoiceIdentifier = invoiceIdentifier;
             CurrencyCode = currencyCode;
             ExchangeRate = exchangeRate;
         }
 
-        public LimitedString1To50 InvoiceSeries { get; }
+        public String1To50 InvoiceSeries { get; }
 
-        public LimitedString1To50 InvoiceSerialNumber { get; }
+        public String1To50 InvoiceSerialNumber { get; }
 
         public DateTime InvoiceIssueDate { get; }
 
