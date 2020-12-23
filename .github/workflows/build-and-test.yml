@@ -30,7 +30,7 @@ jobs:
         dotnet-version: 3.1.x
         
     - name: Clean
-      run: dotnet clean ./Mews.Fiscalization.Spain.sln --configuration Release && dotnet nuget locals all --clear
+      run: dotnet clean ./Mews.Fiscalization.Greece.sln --configuration Release && dotnet nuget locals all --clear
       
     - name: Install dependencies
       run: dotnet restore

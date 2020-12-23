@@ -5,13 +5,13 @@ namespace Mews.Fiscalization.Greece.Model
 {
     public sealed class InvoiceParty :  Coproduct2<LocalInvoiceParty, ForeignInvoiceParty>
     {
-        public InvoiceParty(LocalInvoiceParty firstValue)
-            : base(firstValue)
+        public InvoiceParty(LocalInvoiceParty localParty)
+            : base(localParty)
         {
         }
 
-        public InvoiceParty(ForeignInvoiceParty firstValue)
-            : base(firstValue)
+        public InvoiceParty(ForeignInvoiceParty foreeignParty)
+            : base(foreeignParty)
         {
         }
 

@@ -5,23 +5,23 @@ namespace Mews.Fiscalization.Greece.Model
 {
     public sealed class Invoice : Coproduct4<SalesInvoice, SimplifiedInvoice, RetailSalesReceipt, CreditInvoice>
     {
-        public Invoice(SalesInvoice firstValue)
-            : base(firstValue)
+        public Invoice(SalesInvoice salesInvoice)
+            : base(salesInvoice)
         {
         }
 
-        public Invoice(SimplifiedInvoice firstValue)
-            : base(firstValue)
+        public Invoice(SimplifiedInvoice simplifiedInvoice)
+            : base(simplifiedInvoice)
         {
         }
 
-        public Invoice(RetailSalesReceipt firstValue)
-            : base(firstValue)
+        public Invoice(RetailSalesReceipt retailSalesReceipt)
+            : base(retailSalesReceipt)
         {
         }
 
-        public Invoice(CreditInvoice firstValue)
-            : base(firstValue)
+        public Invoice(CreditInvoice creditInvoice)
+            : base(creditInvoice)
         {
         }
 

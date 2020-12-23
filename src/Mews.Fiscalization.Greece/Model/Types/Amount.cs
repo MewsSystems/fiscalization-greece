@@ -4,18 +4,18 @@ namespace Mews.Fiscalization.Greece.Model
 {
     public sealed class Amount : Coproduct3<NonPositiveAmount, NonNegativeAmount, NegativeAmount>
     {
-        public Amount(NonPositiveAmount firstValue)
-            : base(firstValue)
+        public Amount(NonPositiveAmount nonPositiveAmount)
+            : base(nonPositiveAmount)
         {
         }
 
-        public Amount(NonNegativeAmount secondValue)
-            : base(secondValue)
+        public Amount(NonNegativeAmount nonNegativeAmount)
+            : base(nonNegativeAmount)
         {
         }
 
-        public Amount(NegativeAmount thirdValue)
-            : base(thirdValue)
+        public Amount(NegativeAmount negativeAmount)
+            : base(negativeAmount)
         {
         }
 

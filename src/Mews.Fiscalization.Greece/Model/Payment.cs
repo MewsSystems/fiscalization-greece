@@ -1,5 +1,4 @@
 ﻿using FuncSharp;
-using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
@@ -35,18 +34,6 @@ namespace Mews.Fiscalization.Greece.Model
                     negativePayment => negativePayment.PaymentType
                 );
             }
-        }
-
-        public static ITry<Payment, Error> Create(Amount amount, PaymentType paymentType)
-        {
-            return ObjectValidations.NotNull(amount).FlatMap(c =>
-            {
-                return c.Match(
-                    nonPositiveAmount => Try.Error<Payment, Error>(new Error("Payment amount can be only either non negative or negative.")),
-                    nonNegativeAmount => NonNegativePayment.Create(nonNegativeAmount, paymentType).Map(p => new Payment(p)),
-                    negativeAmount => NegativePayment.Create(negativeAmount, paymentType).Map(p => new Payment(p))
-                );
-            });
         }
     }
 }
