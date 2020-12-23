@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     env:
       DOTNET_NOLOGO: true
@@ -29,6 +29,9 @@ jobs:
       with:
         dotnet-version: 3.1.x
         
+    - name: Clean
+      run: dotnet clean ./Mews.Fiscalization.Spain.sln --configuration Release && dotnet nuget locals all --clear
+      
     - name: Install dependencies
       run: dotnet restore
     
