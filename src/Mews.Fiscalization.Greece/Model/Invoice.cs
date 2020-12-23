@@ -1,10 +1,9 @@
 ﻿using FuncSharp;
 using Mews.Fiscalization.Core.Model;
-using System.Linq;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public abstract class Invoice : Coproduct4<SalesInvoice, SimplifiedInvoice, RetailSalesReceipt, CreditInvoice>
+    public sealed class Invoice : Coproduct4<SalesInvoice, SimplifiedInvoice, RetailSalesReceipt, CreditInvoice>
     {
         public Invoice(SalesInvoice firstValue)
             : base(firstValue)
@@ -86,7 +85,7 @@ namespace Mews.Fiscalization.Greece.Model
                     salesInvoice => null,
                     simplifiedInvoice => null,
                     retailSalesReceipt => null,
-                    creditInvoice => CorrelatedInvoice
+                    creditInvoice => creditInvoice.CorrelatedInvoice
                 );
             }
         }

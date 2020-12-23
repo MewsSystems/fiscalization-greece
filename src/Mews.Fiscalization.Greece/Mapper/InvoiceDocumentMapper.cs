@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Mews.Fiscalization.Core.Model;
 using TaxType = Mews.Fiscalization.Greece.Model.TaxType;
+using FuncSharp;
 
 namespace Mews.Fiscalization.Greece.Mapper
 {
@@ -182,55 +183,33 @@ namespace Mews.Fiscalization.Greece.Mapper
             Invoice invoice,
             RevenueType revenueType)
         {
-            if (revenueType == RevenueType.Products)
-            {
-                return (Dto.Xsd.IncomeClassificationCategory.ProductSaleIncome, GetGoodsAndServicesClassificationType());
-            }
-            else if (revenueType == RevenueType.Services)
-            {
-                return (Dto.Xsd.IncomeClassificationCategory.ProvisionOfServicesIncome, GetGoodsAndServicesClassificationType());
-            }
-            else if (revenueType == RevenueType.Other)
-            {
-                return invoice.Match(
-                    salesInvoice => (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherOrdinaryIncome),
-                    simplifiedInvoice => (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices),
-                    retailSalesReceipt => (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices),
-                    creditInvoice =>
-                    {
-                        if (invoice.CorrelatedInvoice.IsNotNull())
-                        {
-                            return (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherOrdinaryIncome);
-                        }
+            return revenueType.Match(
+                RevenueType.Products, _ => (Dto.Xsd.IncomeClassificationCategory.ProductSaleIncome, GetGoodsAndServicesClassificationType(invoice)),
+                RevenueType.Services, _ => (Dto.Xsd.IncomeClassificationCategory.ProvisionOfServicesIncome, GetGoodsAndServicesClassificationType(invoice)),
+                RevenueType.Other, _ => (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherOrdinaryIncome)
+            );
+        }
 
-                        return (Dto.Xsd.IncomeClassificationCategory.OtherIncomeAndProfits, Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices);
+        private static Dto.Xsd.IncomeClassificationType GetGoodsAndServicesClassificationType(Invoice invoice)
+        {
+            return invoice.Match(
+                salesInvoice =>
+                {
+                    var country = invoice.Counterpart.Country;
+                    if (country.Alpha2Code == GreeceCountryCode)
+                    {
+                        return Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices;
                     }
-                );
-            }
-
-            throw new ArgumentException($"Cannot map revenue type to a pair of {nameof(Dto.Xsd.IncomeClassificationCategory)} and {nameof(Dto.Xsd.IncomeClassificationType)}.");
-
-            Dto.Xsd.IncomeClassificationType GetGoodsAndServicesClassificationType()
-            {
-                return invoice.Match(
-                    salesInvoice =>
+                    else if (country.IsFirst)
                     {
-                        var country = invoice.Counterpart.Country;
-                        if (country.Alpha2Code == GreeceCountryCode)
-                        {
-                            return Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices;
-                        }
-                        else if (country.IsFirst)
-                        {
-                            return Dto.Xsd.IncomeClassificationType.IntraCommunityForeignSalesOfGoodsAndServices;
-                        }
-                        return Dto.Xsd.IncomeClassificationType.ThirdCountryForeignSalesOfGoodsAndServices;
-                    },
-                    simplifiedInvoice => Dto.Xsd.IncomeClassificationType.RetailSalesOfGoodsAndServicesPrivateClientele,
-                    retailSalesReceipt => Dto.Xsd.IncomeClassificationType.RetailSalesOfGoodsAndServicesPrivateClientele,
-                    creditInvoice => Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices
-                );
-            }
+                        return Dto.Xsd.IncomeClassificationType.IntraCommunityForeignSalesOfGoodsAndServices;
+                    }
+                    return Dto.Xsd.IncomeClassificationType.ThirdCountryForeignSalesOfGoodsAndServices;
+                },
+                simplifiedInvoice => Dto.Xsd.IncomeClassificationType.RetailSalesOfGoodsAndServicesPrivateClientele,
+                retailSalesReceipt => Dto.Xsd.IncomeClassificationType.RetailSalesOfGoodsAndServicesPrivateClientele,
+                creditInvoice => Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices
+            );
         }
 
         private static Dto.Xsd.VatCategory MapVatCategory(TaxType taxType)
