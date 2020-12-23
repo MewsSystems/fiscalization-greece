@@ -14,7 +14,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
         static AadeTestInvoicesData()
         {
-            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "INSERT_USER_VAT_NUMBER";
+            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "800356135";
         }
 
         public static IEnumerable<object[]> GetInvoices()

@@ -79,7 +79,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 CurrencySpecified = header.CurrencyCode.IsNotNull(),
                 ExchangeRateSpecified = header.ExchangeRate.IsNotNull(),
                 ExchangeRate = header.ExchangeRate?.Value ?? 0,
-                CorrelatedInvoicesSpecified = invoice.CorrelatedInvoice.IsNotNull(),
+                CorrelatedInvoicesSpecified = invoice.CorrelatedInvoice.NonEmpty,
                 CorrelatedInvoices = invoice.CorrelatedInvoice.GetOrElse((long)0),
                 Currency = header.CurrencyCode.IsNotNull().Match(
                     t => (Dto.Xsd.Currency)Enum.Parse(typeof(Dto.Xsd.Currency), header.CurrencyCode.Value, true),
