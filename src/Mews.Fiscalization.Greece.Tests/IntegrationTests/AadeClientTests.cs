@@ -17,9 +17,9 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
         static AadeClientTests()
         {
-            UserId = Environment.GetEnvironmentVariable("user_id") ?? "INSERT_USER_ID";
-            UserSubscriptionKey = Environment.GetEnvironmentVariable("user_subscription_key") ?? "INSERT_SUBSCRIPTION_KEY";
-            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "INSERT_USER_VAT_NUMBER";
+            UserId = Environment.GetEnvironmentVariable("user_id") ?? "tashamews1";
+            UserSubscriptionKey = Environment.GetEnvironmentVariable("user_subscription_key") ?? "c3cf0906919c4678877ea2d3fb368661";
+            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "800356135";
         }
 
 
@@ -39,7 +39,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
         [Theory]
         [MemberData(nameof(AadeTestInvoicesData.GetInvoices), MemberType = typeof(AadeTestInvoicesData))]
-        public async Task ValidInvoicesWork(SequentialEnumerableStartingWithOne<Invoice> invoices)
+        public async Task ValidInvoicesWork(ISequenceStartingWithOne<Invoice> invoices)
         {
             // Arrange
             var client = new AadeClient(UserId, UserSubscriptionKey, AadeEnvironment.Sandbox);
@@ -48,8 +48,8 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             var response = await client.SendInvoicesAsync(invoices);
 
             // Assert
-            Assert.NotEmpty(response.SendInvoiceResults);
-            Assert.True(response.SendInvoiceResults.Single().Value.IsSuccess);
+            Assert.NotEmpty(response.SendInvoiceResults.Success.Get().Values);
+            Assert.True(response.SendInvoiceResults.Success.Get().Values.Single().Value.IsSuccess);
         }
 
         [Fact]

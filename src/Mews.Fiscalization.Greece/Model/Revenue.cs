@@ -15,7 +15,7 @@ namespace Mews.Fiscalization.Greece.Model
         {
         }
 
-        public Amount NetValue
+        public decimal NetValue
         {
             get
             {
@@ -26,7 +26,7 @@ namespace Mews.Fiscalization.Greece.Model
             }
         }
 
-        public Amount VatValue
+        public decimal VatValue
         {
             get
             {

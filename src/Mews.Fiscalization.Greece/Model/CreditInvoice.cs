@@ -8,7 +8,7 @@ namespace Mews.Fiscalization.Greece.Model
     {
         private CreditInvoice(
             InvoiceHeader header,
-            LocalInvoiceParty issuer,
+            InvoiceParty issuer,
             ISequenceStartingWithOne<NegativeRevenue> revenueItems,
             INonEmptyEnumerable<NegativePayment> payments,
             InvoiceParty counterpart,
@@ -24,7 +24,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public InvoiceHeader Header { get; }
 
-        public LocalInvoiceParty Issuer { get; }
+        public InvoiceParty Issuer { get; }
 
         public ISequenceStartingWithOne<NegativeRevenue> RevenueItems { get; }
 
@@ -36,7 +36,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public static ITry<CreditInvoice, IEnumerable<Error>> Create(
             InvoiceHeader header,
-            LocalInvoiceParty issuer,
+            InvoiceParty issuer,
             ISequenceStartingWithOne<NegativeRevenue> revenueItems,
             INonEmptyEnumerable<NegativePayment> payments,
             InvoiceParty counterPart,

@@ -1,5 +1,6 @@
 ﻿using FuncSharp;
 using Mews.Fiscalization.Core.Model;
+using System.Linq;
 
 namespace Mews.Fiscalization.Greece.Model
 {
@@ -38,7 +39,7 @@ namespace Mews.Fiscalization.Greece.Model
             }
         }
 
-        public LocalInvoiceParty Issuer
+        public InvoiceParty Issuer
         {
             get
             {
@@ -69,10 +70,10 @@ namespace Mews.Fiscalization.Greece.Model
             get
             {
                 return Match(
-                    salesInvoice => salesInvoice.Payments,
-                    simplifiedInvoice => simplifiedInvoice.Payments,
-                    retailSalesReceipt => retailSalesReceipt.Payments,
-                    creditInvoice => creditInvoice.Payments
+                    salesInvoice => salesInvoice.Payments.Select(p => new Payment(p)),
+                    simplifiedInvoice => simplifiedInvoice.Payments.Select(p => new Payment(p)),
+                    retailSalesReceipt => retailSalesReceipt.Payments.Select(p => new Payment(p)),
+                    creditInvoice => creditInvoice.Payments.Select(p => new Payment(p))
                 );
             }
         }
@@ -95,10 +96,10 @@ namespace Mews.Fiscalization.Greece.Model
             get
             {
                 return Match(
-                    salesInvoice => salesInvoice.RevenueItems,
-                    simplifiedInvoice => simplifiedInvoice.RevenueItems,
-                    retailSalesReceipt => retailSalesReceipt.RevenueItems,
-                    creditInvoice => creditInvoice.RevenueItems
+                    salesInvoice => SequenceStartingWithOne.FromPreordered(salesInvoice.RevenueItems.Values.Select(r => new Revenue(r.Value))),
+                    simplifiedInvoice => SequenceStartingWithOne.FromPreordered(simplifiedInvoice.RevenueItems.Values.Select(r => new Revenue(r.Value))),
+                    retailSalesReceipt => SequenceStartingWithOne.FromPreordered(retailSalesReceipt.RevenueItems.Values.Select(r => new Revenue(r.Value))),
+                    creditInvoice => SequenceStartingWithOne.FromPreordered(creditInvoice.RevenueItems.Values.Select(r => new Revenue(r.Value)))
                 );
             }
         }
