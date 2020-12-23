@@ -16,9 +16,9 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
         static AadeClientTests()
         {
-            UserId = Environment.GetEnvironmentVariable("user_id") ?? "tashamews1";
-            UserSubscriptionKey = Environment.GetEnvironmentVariable("user_subscription_key") ?? "c3cf0906919c4678877ea2d3fb368661";
-            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "800356135";
+            UserId = Environment.GetEnvironmentVariable("user_id") ?? "INSERT_USER_ID";
+            UserSubscriptionKey = Environment.GetEnvironmentVariable("user_subscription_key") ?? "INSERT_SUBSCRIPTION_KEY";
+            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "INSERT_USER_VAT_NUMBER";
         }
 
 
