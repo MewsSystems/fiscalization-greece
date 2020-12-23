@@ -10,12 +10,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
     internal static class AadeTestInvoicesData
     {
         public static readonly Country GreeceCountry = Countries.GetByCode("GR").Get();
-        private static readonly string UserVatNumber = "";
-
-        static AadeTestInvoicesData()
-        {
-            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "800356135";
-        }
+        private static readonly string UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "INSERT_USER_VAT_NUMBER";
 
         public static IEnumerable<object[]> GetInvoices()
         {

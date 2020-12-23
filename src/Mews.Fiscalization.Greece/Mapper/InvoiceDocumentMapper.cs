@@ -163,7 +163,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 retailSalesReceipt => Dto.Xsd.InvoiceType.RetailSalesReceipt,
                 creditInvoice =>
                 {
-                    if (invoice.CorrelatedInvoice.IsNotNull())
+                    if (invoice.CorrelatedInvoice.NonEmpty)
                     {
                         return Dto.Xsd.InvoiceType.CreditInvoiceAssociated;
                     }

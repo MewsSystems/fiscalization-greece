@@ -1,7 +1,6 @@
 ﻿using Mews.Fiscalization.Core.Model;
 using Mews.Fiscalization.Greece.Model;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,17 +9,9 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 {
     public class AadeClientTests
     {
-        private static readonly string UserId = "";
-        private static readonly string UserSubscriptionKey = "";
-        private static readonly string UserVatNumber = "";
-
-        static AadeClientTests()
-        {
-            UserId = Environment.GetEnvironmentVariable("user_id") ?? "tashamews1";
-            UserSubscriptionKey = Environment.GetEnvironmentVariable("user_subscription_key") ?? "c3cf0906919c4678877ea2d3fb368661";
-            UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "800356135";
-        }
-
+        private static readonly string UserId = Environment.GetEnvironmentVariable("user_id") ?? "INSERT_USER_ID";
+        private static readonly string UserSubscriptionKey = Environment.GetEnvironmentVariable("user_subscription_key") ?? "INSERT_SUBSCRIPTION_KEY";
+        private static readonly string UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "INSERT_USER_VAT_NUMBER";
 
         [Fact]
         public async Task CheckUserCredentials()
