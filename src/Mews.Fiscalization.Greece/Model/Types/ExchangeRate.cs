@@ -1,7 +1,7 @@
 ﻿using FuncSharp;
 using Mews.Fiscalization.Core.Model;
 
-namespace Mews.Fiscalization.Greece.Model.Types
+namespace Mews.Fiscalization.Greece.Model
 {
     public sealed class ExchangeRate
     {

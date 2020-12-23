@@ -61,29 +61,24 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 
             // Step 1 - regular invoice
             var country = Countries.GetByCode("GR").Get();
-            var taxNumber = TaxpayerIdentificationNumber.Create(country, UserVatNumber).Success.Get();
-
-            var invoices = SequenceStartingWithOne.FromPreordered(new List<Invoice>
-            {
+            var invoices = SequenceStartingWithOne.FromPreordered(NonEmptyEnumerable.Create(
                 new Invoice(SalesInvoice.Create(
-                    issuer: InvoiceParty.Create(country, taxNumber).Success.Get(),
-                    header: new InvoiceHeader(String1To50.CreateUnsafe("0"), String1To50.CreateUnsafe("50020"), DateTime.Now, currencyCode: CurrencyCode.Create("EUR").Success.Get()),
-                    revenueItems: SequenceStartingWithOne.FromPreordered(new List<NonNegativeRevenue>
-                    {
-                        NonNegativeRevenue.Create(NonNegativeAmount.Create(88.50m).Success.Get(), NonNegativeAmount.Create(11.50m).Success.Get(), TaxType.Vat13, RevenueType.Products).Success.Get(),
-                        NonNegativeRevenue.Create(NonNegativeAmount.Create(88.50m).Success.Get(), NonNegativeAmount.Create(11.50m).Success.Get(), TaxType.Vat13, RevenueType.Services).Success.Get(),
-                        NonNegativeRevenue.Create(NonNegativeAmount.Create(88.50m).Success.Get(), NonNegativeAmount.Create(11.50m).Success.Get(), TaxType.Vat13, RevenueType.Other).Success.Get()
-                    }).Get(),
+                    info: AadeTestInvoicesData.CreateInvoiceInfo(invoiceSerialNumber: "50021"),
+                    revenueItems: SequenceStartingWithOne.FromPreordered(NonEmptyEnumerable.Create(
+                        NonNegativeRevenue.Create(NonNegativeAmount.Create(88.50m).Success.Get(), NonNegativeAmount.Create(11.50m).Success.Get(), AadeTestInvoicesData.CreateRevenueInfo(TaxType.Vat13, RevenueType.Products)).Success.Get(),
+                        NonNegativeRevenue.Create(NonNegativeAmount.Create(88.50m).Success.Get(), NonNegativeAmount.Create(11.50m).Success.Get(), AadeTestInvoicesData.CreateRevenueInfo(TaxType.Vat13, RevenueType.Services)).Success.Get(),
+                        NonNegativeRevenue.Create(NonNegativeAmount.Create(88.50m).Success.Get(), NonNegativeAmount.Create(11.50m).Success.Get(), AadeTestInvoicesData.CreateRevenueInfo(TaxType.Vat13, RevenueType.Other)).Success.Get()
+                    )),
                     payments: NonEmptyEnumerable.Create(
                         NonNegativePayment.Create(NonNegativeAmount.Create(100m).Success.Get(), PaymentType.Cash).Success.Get(),
                         NonNegativePayment.Create(NonNegativeAmount.Create(100m).Success.Get(), PaymentType.OnCredit).Success.Get(),
                         NonNegativePayment.Create(NonNegativeAmount.Create(100m).Success.Get(), PaymentType.DomesticPaymentsAccountNumber).Success.Get()
                     ),
-                    counterPart: InvoiceParty.Create(country, TaxpayerIdentificationNumber.Create(country, "090701900").Success.Get()).Success.Get()
+                    counterpart: AadeTestInvoicesData.CreateInvoiceParty(country, "090701900")
                 ).Success.Get())
-            });
+            ));
 
-            var response = await client.SendInvoicesAsync(invoices.Get());
+            var response = await client.SendInvoicesAsync(invoices);
 
             Assert.True(response.SendInvoiceResults.IsSuccess);
             Assert.All(response.SendInvoiceResults.Success.Get().Values, result => Assert.True(result.Value.IsSuccess));
@@ -94,27 +89,24 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             // Step 2 - negative invoice
             var correlatedInvoice = response.SendInvoiceResults.Success.Get().Values.First().Value.Success.InvoiceRegistrationNumber.Value;
 
-            var negativeInvoice = SequenceStartingWithOne.FromPreordered(new List<Invoice>
-            {
+            var negativeInvoice = SequenceStartingWithOne.FromPreordered(NonEmptyEnumerable.Create(
                 new Invoice(CreditInvoice.Create(
-                    issuer: InvoiceParty.Create(country, taxNumber).Success.Get(),
                     correlatedInvoice: correlatedInvoice,
-                    header: new InvoiceHeader(String1To50.CreateUnsafe("0"), String1To50.CreateUnsafe("50021"), DateTime.Now, currencyCode: CurrencyCode.Create("EUR").Success.Get()),
-                    revenueItems: SequenceStartingWithOne.FromPreordered(new List<NegativeRevenue>
-                    {
-                        NegativeRevenue.Create(NegativeAmount.Create(-53.65m).Success.Get(), NonPositiveAmount.Create(-12.88m).Success.Get(), TaxType.Vat6, RevenueType.Products).Success.Get(),
-                        NegativeRevenue.Create(NegativeAmount.Create(-53.65m).Success.Get(), NonPositiveAmount.Create(-12.88m).Success.Get(), TaxType.Vat6, RevenueType.Services).Success.Get(),
-                        NegativeRevenue.Create(NegativeAmount.Create(-53.65m).Success.Get(), NonPositiveAmount.Create(-12.88m).Success.Get(), TaxType.Vat6, RevenueType.Other).Success.Get()
-                    }).Get(),
+                    info: AadeTestInvoicesData.CreateInvoiceInfo(invoiceSerialNumber: "50021"),
+                    revenueItems: SequenceStartingWithOne.FromPreordered(NonEmptyEnumerable.Create(
+                        NegativeRevenue.Create(NegativeAmount.Create(-53.65m).Success.Get(), NonPositiveAmount.Create(-12.88m).Success.Get(), AadeTestInvoicesData.CreateRevenueInfo(TaxType.Vat6, RevenueType.Products)).Success.Get(),
+                        NegativeRevenue.Create(NegativeAmount.Create(-53.65m).Success.Get(), NonPositiveAmount.Create(-12.88m).Success.Get(), AadeTestInvoicesData.CreateRevenueInfo(TaxType.Vat6, RevenueType.Services)).Success.Get(),
+                        NegativeRevenue.Create(NegativeAmount.Create(-53.65m).Success.Get(), NonPositiveAmount.Create(-12.88m).Success.Get(), AadeTestInvoicesData.CreateRevenueInfo(TaxType.Vat6, RevenueType.Other)).Success.Get()
+                    )),
                     payments: NonEmptyEnumerable.Create(
                         NegativePayment.Create(NegativeAmount.Create(-133.06m).Success.Get(), PaymentType.Cash).Success.Get(),
                         NegativePayment.Create(NegativeAmount.Create(-66.53m).Success.Get(), PaymentType.DomesticPaymentsAccountNumber).Success.Get()
                     ),
-                    counterPart: InvoiceParty.Create(country, TaxpayerIdentificationNumber.Create(country, "090701900").Success.Get(), NonNegativeInt.CreateUnsafe(0), address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City"))).Success.Get()
+                    counterPart: AadeTestInvoicesData.CreateInvoiceParty(country, "090701900", address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City")))
                 ).Success.Get())
-            });
+            ));
 
-            var negativeInvoiceResponse = await client.SendInvoicesAsync(negativeInvoice.Get());
+            var negativeInvoiceResponse = await client.SendInvoicesAsync(negativeInvoice);
 
             // Assert
             Assert.True(negativeInvoiceResponse.SendInvoiceResults.IsSuccess);

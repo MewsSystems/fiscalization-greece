@@ -36,37 +36,30 @@ namespace Mews.Fiscalization.Greece.Model
             }
         }
 
-        public TaxType TaxType
+        public RevenueInfo Info
         {
             get
             {
                 return Match(
-                    nonNegativeRevenue => nonNegativeRevenue.TaxType,
-                    negativeRevenue => negativeRevenue.TaxType
+                    nonNegativeRevenue => nonNegativeRevenue.Info,
+                    negativeRevenue => negativeRevenue.Info
                 );
             }
         }
 
-        public VatExemptionType? VatExemption
+        public TaxType TaxType
         {
-            get
-            {
-                return Match(
-                    nonNegativeRevenue => nonNegativeRevenue.VatExemption,
-                    negativeRevenue => negativeRevenue.VatExemption
-                );
-            }
+            get { return Info.TaxType; }
+        }
+
+        public IOption<VatExemptionType> VatExemption
+        {
+            get { return Info.VatExemption; }
         }
 
         public RevenueType RevenueType
         {
-            get
-            {
-                return Match(
-                    nonNegativeRevenue => nonNegativeRevenue.RevenueType,
-                    negativeRevenue => negativeRevenue.RevenueType
-                );
-            }
+            get { return Info.RevenueType; }
         }
     }
 }

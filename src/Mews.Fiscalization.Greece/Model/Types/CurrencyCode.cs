@@ -20,11 +20,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public static ITry<CurrencyCode, Core.Model.Error> Create(string value)
         {
-            return StringValidations.LengthInRange(value, 3, 3).FlatMap(code =>
-            {
-                var validCurrencyCode = StringValidations.In(code, AllowedValues);
-                return validCurrencyCode.Map(c => new CurrencyCode(c));
-            });
+            return StringValidations.In(value, AllowedValues).Map(v => new CurrencyCode(v));
         }
     }
 }

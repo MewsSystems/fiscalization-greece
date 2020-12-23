@@ -5,36 +5,22 @@ namespace Mews.Fiscalization.Greece.Model
 {
     public sealed class LocalInvoiceParty
     {
-        private LocalInvoiceParty(Country country, NonNegativeInt branch, TaxpayerIdentificationNumber taxIdentifier = null, string name = null, Address address = null)
+        private LocalInvoiceParty(InvoicePartyInfo info, Country country)
         {
+            Info = info;
             Country = country;
-            Branch = branch;
-            TaxIdentifier = taxIdentifier;
-            Name = name;
-            Address = address;
         }
+
+        public InvoicePartyInfo Info { get; }
 
         public Country Country { get; }
 
-        public NonNegativeInt Branch { get; }
-
-        public TaxpayerIdentificationNumber TaxIdentifier { get; }
-
-        public string Name { get; }
-
-        public Address Address { get; }
-
-        public static ITry<LocalInvoiceParty, Error> Create(
-            Country country,
-            TaxpayerIdentificationNumber taxpayerNumber = null,
-            NonNegativeInt? branch = null,
-            string name = null,
-            Address address = null)
+        public static ITry<LocalInvoiceParty, Error> Create(InvoicePartyInfo info, Country country)
         {
-            return ObjectValidations.NotNull(country).FlatMap(c =>
+            return ObjectValidations.NotNull(info).FlatMap(i =>
             {
-                var validCountry = country.ToTry(cc => cc.Alpha2Code == "GR", _ => new Error($"Country must be Greece for this invoice type: {nameof(LocalInvoiceParty)}"));
-                return validCountry.Map(cc => new LocalInvoiceParty(cc, branch ?? NonNegativeInt.CreateUnsafe(0), taxpayerNumber, name, address));
+                var validCountry = country.ToTry(c => c.Alpha2Code == "GR", _ => new Error($"Country must be Greece for this invoice type: {nameof(LocalInvoiceParty)}"));
+                return validCountry.Map(c => new LocalInvoiceParty(i, c));
             });
         }
     }

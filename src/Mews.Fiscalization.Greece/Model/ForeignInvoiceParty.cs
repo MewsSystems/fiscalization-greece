@@ -5,36 +5,22 @@ namespace Mews.Fiscalization.Greece.Model
 {
     public sealed class ForeignInvoiceParty
     {
-        private ForeignInvoiceParty(Country country, NonNegativeInt branch, TaxpayerIdentificationNumber taxIdentifier = null, string name = null, Address address = null)
+        private ForeignInvoiceParty(InvoicePartyInfo info, Country country)
         {
             Country = country;
-            TaxIdentifier = taxIdentifier;
-            Branch = branch;
-            Name = name;
-            Address = address;
+            Info = info;
         }
+
+        public InvoicePartyInfo Info { get; }
 
         public Country Country { get; }
 
-        public NonNegativeInt Branch { get; }
-
-        public TaxpayerIdentificationNumber TaxIdentifier { get; }
-
-        public string Name { get; }
-
-        public Address Address { get; }
-
-        public static ITry<ForeignInvoiceParty, Error> Create(
-            Country country,
-            TaxpayerIdentificationNumber taxpayerNumber = null,
-            NonNegativeInt? branch = null,
-            string name = null,
-            Address address = null)
+        public static ITry<ForeignInvoiceParty, Error> Create(InvoicePartyInfo info, Country country)
         {
-            return ObjectValidations.NotNull(country).FlatMap(c =>
+            return ObjectValidations.NotNull(info).FlatMap(i =>
             {
-                var validCountry = country.ToTry(cc => cc.Alpha2Code != "GR", _ => new Error($"{nameof(ForeignInvoiceParty)} cannot use greece as a country.")) ;
-                return validCountry.Map(cc => new ForeignInvoiceParty(cc, branch ?? NonNegativeInt.CreateUnsafe(0), taxpayerNumber, name, address));
+                var validCountry = country.ToTry(c => c.Alpha2Code != "GR", _ => new Error($"{nameof(ForeignInvoiceParty)} cannot use greece as a country.")) ;
+                return validCountry.Map(c => new ForeignInvoiceParty(i, c));
             });
         }
     }

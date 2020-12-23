@@ -7,22 +7,18 @@ namespace Mews.Fiscalization.Greece.Model
     public sealed class SalesInvoice
     {
         private SalesInvoice(
-            InvoiceHeader header,
-            InvoiceParty issuer,
+            InvoiceInfo info,
             ISequenceStartingWithOne<NonNegativeRevenue> revenueItems,
             INonEmptyEnumerable<NonNegativePayment> payments,
             InvoiceParty counterpart)
         {
-            Header = header;
-            Issuer = issuer;
+            Info = info;
             RevenueItems = revenueItems;
             Payments = payments;
             Counterpart = counterpart;
         }
 
-        public InvoiceHeader Header { get; }
-
-        public InvoiceParty Issuer { get; }
+        public InvoiceInfo Info { get; }
 
         public ISequenceStartingWithOne<NonNegativeRevenue> RevenueItems { get; }
 
@@ -31,19 +27,17 @@ namespace Mews.Fiscalization.Greece.Model
         public InvoiceParty Counterpart { get; }
 
         public static ITry<SalesInvoice, IEnumerable<Error>> Create(
-            InvoiceHeader header,
-            InvoiceParty issuer,
+            InvoiceInfo info,
             ISequenceStartingWithOne<NonNegativeRevenue> revenueItems,
             INonEmptyEnumerable<NonNegativePayment> payments,
-            InvoiceParty counterPart)
+            InvoiceParty counterpart)
         {
             return Try.Aggregate(
-                ObjectExtensions.NotNull(header),
-                ObjectExtensions.NotNull(issuer),
+                ObjectExtensions.NotNull(info),
                 ObjectExtensions.NotNull(revenueItems),
                 ObjectExtensions.NotNull(payments),
-                ObjectExtensions.NotNull(counterPart),
-                (h, i, r, p, c) => new SalesInvoice(h, i, r, p, c)
+                ObjectExtensions.NotNull(counterpart),
+                (i, r, p, c) => new SalesInvoice(i, r, p, c)
             );
         }
     }

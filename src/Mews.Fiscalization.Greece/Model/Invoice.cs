@@ -25,41 +25,33 @@ namespace Mews.Fiscalization.Greece.Model
         {
         }
 
-        public InvoiceHeader Header
+        public InvoiceInfo Info
         {
             get
             {
                 return Match(
-                    salesInvoice => salesInvoice.Header,
-                    simplifiedInvoice => simplifiedInvoice.Header,
-                    retailSalesReceipt => retailSalesReceipt.Header,
-                    creditInvoice => creditInvoice.Header
+                    salesInvoice => salesInvoice.Info,
+                    simplifiedInvoice => simplifiedInvoice.Info,
+                    retailSalesReceipt => retailSalesReceipt.Info,
+                    creditInvoice => creditInvoice.Info
                 );
             }
         }
 
         public InvoiceParty Issuer
         {
-            get
-            {
-                return Match(
-                    salesInvoice => salesInvoice.Issuer,
-                    simplifiedInvoice => simplifiedInvoice.Issuer,
-                    retailSalesReceipt => retailSalesReceipt.Issuer,
-                    creditInvoice => creditInvoice.Issuer
-                );
-            }
+            get { return Info.Issuer; }
         }
 
-        public InvoiceParty Counterpart
+        public IOption<InvoiceParty> Counterpart
         {
             get
             {
                 return Match(
-                    salesInvoice => salesInvoice.Counterpart,
-                    simplifiedInvoice => null,
-                    retailSalesReceipt => null,
-                    creditInvoice => creditInvoice.Counterpart
+                    salesInvoice => salesInvoice.Counterpart.ToOption(),
+                    simplifiedInvoice => Option.Empty<InvoiceParty>(),
+                    retailSalesReceipt => Option.Empty<InvoiceParty>(),
+                    creditInvoice => creditInvoice.Counterpart.ToOption()
                 );
             }
         }
@@ -77,17 +69,9 @@ namespace Mews.Fiscalization.Greece.Model
             }
         }
 
-        public long? CorrelatedInvoice
+        public IOption<long> CorrelatedInvoice
         {
-            get
-            {
-                return Match(
-                    salesInvoice => null,
-                    simplifiedInvoice => null,
-                    retailSalesReceipt => null,
-                    creditInvoice => creditInvoice.CorrelatedInvoice
-                );
-            }
+            get { return Fourth.FlatMap(creditInvoice => creditInvoice.CorrelatedInvoice); }
         }
 
         public ISequenceStartingWithOne<Revenue> RevenueItems

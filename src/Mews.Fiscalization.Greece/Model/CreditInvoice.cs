@@ -7,24 +7,20 @@ namespace Mews.Fiscalization.Greece.Model
     public sealed class CreditInvoice
     {
         private CreditInvoice(
-            InvoiceHeader header,
-            InvoiceParty issuer,
+            InvoiceInfo info,
             ISequenceStartingWithOne<NegativeRevenue> revenueItems,
             INonEmptyEnumerable<NegativePayment> payments,
             InvoiceParty counterpart,
             long? correlatedInvoice = null)
         {
-            Header = header;
-            Issuer = issuer;
+            Info = info;
             RevenueItems = revenueItems;
             Payments = payments;
             Counterpart = counterpart;
-            CorrelatedInvoice = correlatedInvoice;
+            CorrelatedInvoice = correlatedInvoice.ToOption();
         }
 
-        public InvoiceHeader Header { get; }
-
-        public InvoiceParty Issuer { get; }
+        public InvoiceInfo Info { get; }
 
         public ISequenceStartingWithOne<NegativeRevenue> RevenueItems { get; }
 
@@ -32,23 +28,21 @@ namespace Mews.Fiscalization.Greece.Model
 
         public InvoiceParty Counterpart { get; }
 
-        public long? CorrelatedInvoice { get; }
+        public IOption<long> CorrelatedInvoice { get; }
 
         public static ITry<CreditInvoice, IEnumerable<Error>> Create(
-            InvoiceHeader header,
-            InvoiceParty issuer,
+            InvoiceInfo info,
             ISequenceStartingWithOne<NegativeRevenue> revenueItems,
             INonEmptyEnumerable<NegativePayment> payments,
             InvoiceParty counterPart,
             long? correlatedInvoice = null)
         {
             return Try.Aggregate(
-                ObjectExtensions.NotNull(header),
-                ObjectExtensions.NotNull(issuer),
+                ObjectExtensions.NotNull(info),
                 ObjectExtensions.NotNull(revenueItems),
                 ObjectExtensions.NotNull(payments),
                 ObjectExtensions.NotNull(counterPart),
-                (h, i, r, p, c) => new CreditInvoice(h, i, r, p, c, correlatedInvoice)
+                (i, r, p, c) => new CreditInvoice(i, r, p, c, correlatedInvoice)
             );
         }
     }

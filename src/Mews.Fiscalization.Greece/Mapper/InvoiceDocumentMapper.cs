@@ -23,8 +23,8 @@ namespace Mews.Fiscalization.Greece.Mapper
         {
             return new Dto.Xsd.Invoice
             {
-                InvoiceId = invoice.Header.InvoiceIdentifier,
-                InvoiceIssuer = GetInvoiceParty(invoice.Issuer),
+                InvoiceId = invoice.Info.Header.InvoiceIdentifier,
+                InvoiceIssuer = GetInvoiceParty(invoice.Issuer.ToOption()),
                 InvoiceCounterpart = GetInvoiceParty(invoice.Counterpart),
                 InvoiceSummary = GetInvoiceSummary(invoice),
                 InvoiceHeader = GetInvoiceHeader(invoice),
@@ -37,21 +37,18 @@ namespace Mews.Fiscalization.Greece.Mapper
             };
         }
 
-        private static Dto.Xsd.InvoiceParty GetInvoiceParty(InvoiceParty counterpart)
+        private static Dto.Xsd.InvoiceParty GetInvoiceParty(IOption<InvoiceParty> counterpart)
         {
-            if (counterpart != null)
+            var invoiceParty = counterpart.Map(p => new Dto.Xsd.InvoiceParty
             {
-                return new Dto.Xsd.InvoiceParty
-                {
-                    Country = (Dto.Xsd.Country)Enum.Parse(typeof(Dto.Xsd.Country), counterpart.Country.Alpha2Code, true),
-                    Branch = counterpart.Branch.Value,
-                    Name = counterpart.Name,
-                    VatNumber = counterpart.TaxpayerNumber.TaxpayerNumber,
-                    Address = GetAddress(counterpart.Address)
-                };
-            }
+                Country = (Dto.Xsd.Country)Enum.Parse(typeof(Dto.Xsd.Country), p.Country.Alpha2Code, true),
+                Branch = p.Info.Branch.Value,
+                Name = p.Info.Name.GetOrNull(),
+                VatNumber = p.Info.TaxIdentifier.Map(n => n.TaxpayerNumber).GetOrNull(),
+                Address = p.Info.Address.Map(a => GetAddress(a)).GetOrNull()
+            });
 
-            return null;
+            return invoiceParty.GetOrNull();
         }
 
         private static Dto.Xsd.Address GetAddress(Address address)
@@ -72,46 +69,41 @@ namespace Mews.Fiscalization.Greece.Mapper
 
         private static Dto.Xsd.InvoiceHeader GetInvoiceHeader(Invoice invoice)
         {
-            var invoiceHeader = new Dto.Xsd.InvoiceHeader
+            var header = invoice.Info.Header;
+            return new Dto.Xsd.InvoiceHeader
             {
                 InvoiceType = MapInvoiceType(invoice),
-                IssueDate = invoice.Header.InvoiceIssueDate,
-                SerialNumber = invoice.Header.InvoiceSerialNumber.Value,
-                Series = invoice.Header.InvoiceSeries.Value,
-                CurrencySpecified = invoice.Header.CurrencyCode.IsNotNull(),
-                ExchangeRateSpecified = invoice.Header.ExchangeRate.IsNotNull(),
-                ExchangeRate = invoice.Header.ExchangeRate?.Value ?? 0,
+                IssueDate = header.InvoiceIssueDate,
+                SerialNumber = header.InvoiceSerialNumber.Value,
+                Series = header.InvoiceSeries.Value,
+                CurrencySpecified = header.CurrencyCode.IsNotNull(),
+                ExchangeRateSpecified = header.ExchangeRate.IsNotNull(),
+                ExchangeRate = header.ExchangeRate?.Value ?? 0,
                 CorrelatedInvoicesSpecified = invoice.CorrelatedInvoice.IsNotNull(),
-                CorrelatedInvoices = invoice.CorrelatedInvoice ?? 0
+                CorrelatedInvoices = invoice.CorrelatedInvoice.GetOrElse((long)0),
+                Currency = header.CurrencyCode.IsNotNull().Match(
+                    t => (Dto.Xsd.Currency)Enum.Parse(typeof(Dto.Xsd.Currency), header.CurrencyCode.Value, true),
+                    f => (Dto.Xsd.Currency?)null
+                )
             };
-
-            if (invoice.Header.CurrencyCode.IsNotNull())
-            {
-                invoiceHeader.Currency = (Dto.Xsd.Currency)Enum.Parse(typeof(Dto.Xsd.Currency), invoice.Header.CurrencyCode.Value, true);
-            }
-
-            return invoiceHeader;
         }
 
         private static Dto.Xsd.InvoiceDetail GetInvoiceDetail(Invoice invoice, Indexed<Revenue> indexedRevenueItem)
         {
             var revenueItem = indexedRevenueItem.Value;
-            var invoiceDetail = new Dto.Xsd.InvoiceDetail
+            return new Dto.Xsd.InvoiceDetail
             {
                 LineNumber = indexedRevenueItem.Index,
                 NetValue = Math.Abs(revenueItem.NetValue),
                 VatAmount = Math.Abs(revenueItem.VatValue),
                 VatCategory = MapVatCategory(revenueItem.TaxType),
-                IncomeClassification = new[] { GetIncomeClassification(invoice, revenueItem) }
+                IncomeClassification = new[] { GetIncomeClassification(invoice, revenueItem) },
+                VatExemptionCategorySpecified = revenueItem.VatExemption.NonEmpty,
+                VatExemptionCategory = revenueItem.VatExemption.Match(
+                    c => MapVatExemptionCategory(c),
+                    _ => (Dto.Xsd.VatExemptionCategory?)null
+                )
             };
-
-            if (revenueItem.VatExemption.HasValue)
-            {
-                invoiceDetail.VatExemptionCategory = MapVatExemptionCategory(revenueItem.VatExemption.Value);
-                invoiceDetail.VatExemptionCategorySpecified = true;
-            }
-
-            return invoiceDetail;
         }
 
         private static Dto.Xsd.InvoiceSummary GetInvoiceSummary(Invoice invoice)
@@ -155,7 +147,8 @@ namespace Mews.Fiscalization.Greece.Mapper
             return invoice.Match(
                 salesInvoice =>
                 {
-                    var country = invoice.Counterpart.Country;
+                    var info = invoice.Info;
+                    var country = invoice.Counterpart.Get(_ => new Exception("Counterpart is mandatory on this invoice type")).Country;
                     if (country.Alpha2Code == GreeceCountryCode)
                     {
                         return Dto.Xsd.InvoiceType.SalesInvoice;
@@ -195,7 +188,7 @@ namespace Mews.Fiscalization.Greece.Mapper
             return invoice.Match(
                 salesInvoice =>
                 {
-                    var country = invoice.Counterpart.Country;
+                    var country = invoice.Counterpart.Get(_ => new Exception("Counterpart is mandatory on this invoice type")).Country;
                     if (country.Alpha2Code == GreeceCountryCode)
                     {
                         return Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices;
