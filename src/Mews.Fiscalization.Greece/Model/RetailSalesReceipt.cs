@@ -33,17 +33,12 @@ namespace Mews.Fiscalization.Greece.Model
             INonEmptyEnumerable<NonNegativePayment> payments)
         {
             return Try.Aggregate(
-                NotNull(header),
-                NotNull(issuer),
-                NotNull(revenueItems),
-                NotNull(payments),
+                ObjectExtensions.NotNull(header),
+                ObjectExtensions.NotNull(issuer),
+                ObjectExtensions.NotNull(revenueItems),
+                ObjectExtensions.NotNull(payments),
                 (h, i, r, p) => new RetailSalesReceipt(h, i, r, p)
             );
-        }
-
-        public static ITry<T, IEnumerable<Error>> NotNull<T>(T value)
-        {
-            return value.ToTry(v => v.IsNotNull(), _ => new Error("Value cannot be null.").ToEnumerable());
         }
     }
 }

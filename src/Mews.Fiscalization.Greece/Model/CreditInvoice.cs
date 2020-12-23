@@ -43,18 +43,13 @@ namespace Mews.Fiscalization.Greece.Model
             long? correlatedInvoice = null)
         {
             return Try.Aggregate(
-                NotNull(header),
-                NotNull(issuer),
-                NotNull(revenueItems),
-                NotNull(payments),
-                NotNull(counterPart),
+                ObjectExtensions.NotNull(header),
+                ObjectExtensions.NotNull(issuer),
+                ObjectExtensions.NotNull(revenueItems),
+                ObjectExtensions.NotNull(payments),
+                ObjectExtensions.NotNull(counterPart),
                 (h, i, r, p, c) => new CreditInvoice(h, i, r, p, c, correlatedInvoice)
             );
-        }
-
-        public static ITry<T, IEnumerable<Error>> NotNull<T>(T value)
-        {
-            return value.ToTry(v => v.IsNotNull(), _ => new Error("Value cannot be null.").ToEnumerable());
         }
     }
 }
