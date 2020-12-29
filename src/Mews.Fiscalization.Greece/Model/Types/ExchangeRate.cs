@@ -1,19 +1,24 @@
-﻿using Mews.Fiscalization.Core.Model;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
 
-namespace Mews.Fiscalization.Greece.Model.Types
+namespace Mews.Fiscalization.Greece.Model
 {
-    public class ExchangeRate : LimitedDecimal
+    public sealed class ExchangeRate
     {
-        private static readonly DecimalLimitation Limitation = new DecimalLimitation(min: 0, maxDecimalPlaces: 5);
-
-        public ExchangeRate(decimal value)
-            : base(value, Limitation)
+        private ExchangeRate(decimal value)
         {
+            Value = value;
         }
 
-        public static bool IsValid(decimal value)
+        public decimal Value { get; }
+
+        public static ITry<ExchangeRate, Error> Create(decimal value)
         {
-            return IsValid(value, Limitation);
+            return DecimalValidations.MaxDecimalPlaces(value, 5).FlatMap(rate =>
+            {
+                var validExchangeRate = DecimalValidations.HigherThanOrEqual(rate, 0);
+                return validExchangeRate.Map(r => new ExchangeRate(r));
+            });
         }
     }
 }

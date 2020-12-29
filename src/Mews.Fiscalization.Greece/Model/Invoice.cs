@@ -1,42 +1,90 @@
-﻿using Mews.Fiscalization.Core.Model;
-using System;
-using System.Linq;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public abstract class Invoice
+    public sealed class Invoice : Coproduct4<SalesInvoice, SimplifiedInvoice, RetailSalesReceipt, CreditInvoice>
     {
-        public Invoice(
-            InvoiceHeader header,
-            LocalInvoiceParty issuer,
-            ISequentialEnumerableStartingWithOne<Revenue> revenueItems,
-            INonEmptyEnumerable<Payment> payments,
-            InvoiceParty counterpart = null,
-            long? correlatedInvoice = null)
+        public Invoice(SalesInvoice salesInvoice)
+            : base(salesInvoice)
         {
-            Header = header ?? throw new ArgumentNullException(nameof(header));
-            Issuer = issuer ?? throw new ArgumentNullException(nameof(issuer));
-            RevenueItems = revenueItems  ?? throw new ArgumentNullException(nameof(revenueItems));
-            Payments = payments ?? throw new ArgumentNullException(nameof(payments));
-            Counterpart = counterpart;
-            CorrelatedInvoice = correlatedInvoice;
+        }
 
-            if (!RevenueItems.Any())
+        public Invoice(SimplifiedInvoice simplifiedInvoice)
+            : base(simplifiedInvoice)
+        {
+        }
+
+        public Invoice(RetailSalesReceipt retailSalesReceipt)
+            : base(retailSalesReceipt)
+        {
+        }
+
+        public Invoice(CreditInvoice creditInvoice)
+            : base(creditInvoice)
+        {
+        }
+
+        public InvoiceInfo Info
+        {
+            get
             {
-                throw new ArgumentException($"Minimal count of {nameof(revenueItems)} is 1.");
+                return Match(
+                    salesInvoice => salesInvoice.Info,
+                    simplifiedInvoice => simplifiedInvoice.Info,
+                    retailSalesReceipt => retailSalesReceipt.Info,
+                    creditInvoice => creditInvoice.Info
+                );
             }
         }
 
-        public InvoiceHeader Header { get; }
+        public InvoiceParty Issuer
+        {
+            get { return Info.Issuer; }
+        }
 
-        public LocalInvoiceParty Issuer { get; }
+        public IOption<InvoiceParty> Counterpart
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => salesInvoice.Counterpart.ToOption(),
+                    simplifiedInvoice => Option.Empty<InvoiceParty>(),
+                    retailSalesReceipt => Option.Empty<InvoiceParty>(),
+                    creditInvoice => creditInvoice.Counterpart.ToOption()
+                );
+            }
+        }
 
-        public ISequentialEnumerableStartingWithOne<Revenue> RevenueItems { get; }
+        public INonEmptyEnumerable<Payment> Payments
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => salesInvoice.Payments.Select(p => new Payment(p)),
+                    simplifiedInvoice => simplifiedInvoice.Payments.Select(p => new Payment(p)),
+                    retailSalesReceipt => retailSalesReceipt.Payments.Select(p => new Payment(p)),
+                    creditInvoice => creditInvoice.Payments.Select(p => new Payment(p))
+                );
+            }
+        }
 
-        public INonEmptyEnumerable<Payment> Payments { get; }
+        public IOption<long> CorrelatedInvoice
+        {
+            get { return Fourth.FlatMap(creditInvoice => creditInvoice.CorrelatedInvoice); }
+        }
 
-        public InvoiceParty Counterpart { get; }
-
-        public long? CorrelatedInvoice { get; }
+        public ISequenceStartingWithOne<Revenue> RevenueItems
+        {
+            get
+            {
+                return Match(
+                    salesInvoice => SequenceStartingWithOne.FromPreordered(salesInvoice.RevenueItems.Values.Select(r => new Revenue(r.Value))),
+                    simplifiedInvoice => SequenceStartingWithOne.FromPreordered(simplifiedInvoice.RevenueItems.Values.Select(r => new Revenue(r.Value))),
+                    retailSalesReceipt => SequenceStartingWithOne.FromPreordered(retailSalesReceipt.RevenueItems.Values.Select(r => new Revenue(r.Value))),
+                    creditInvoice => SequenceStartingWithOne.FromPreordered(creditInvoice.RevenueItems.Values.Select(r => new Revenue(r.Value)))
+                );
+            }
+        }
     }
 }

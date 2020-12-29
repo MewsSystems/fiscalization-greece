@@ -21,7 +21,7 @@ namespace Mews.Fiscalization.Greece
             RestClient = new RestClient(userId, subscriptionKey, environment, logger);
         }
 
-        public async Task<SendInvoicesResult> SendInvoicesAsync(ISequentialEnumerableStartingWithOne<Invoice> invoices)
+        public async Task<SendInvoicesResult> SendInvoicesAsync(ISequenceStartingWithOne<Invoice> invoices)
         {
             var responseDoc = await RestClient.SendRequestAsync(InvoiceDocumentMapper.GetInvoiceDoc(invoices));
 

@@ -38,7 +38,7 @@ namespace Mews.Fiscalization.Greece.Dto.Xsd
         public decimal VatAmount { get; set; }
 
         [XmlElement(ElementName = "vatExemptionCategory")]
-        public VatExemptionCategory VatExemptionCategory { get; set; }
+        public VatExemptionCategory? VatExemptionCategory { get; set; }
 
         [XmlIgnore]
         public bool VatExemptionCategorySpecified { get; set; }

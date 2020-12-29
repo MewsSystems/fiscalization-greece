@@ -1,23 +1,49 @@
-﻿using System;
+﻿using FuncSharp;
 using Mews.Fiscalization.Core.Model;
+using System.Collections.Generic;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class CreditInvoice : Invoice
+    public sealed class CreditInvoice
     {
-        public CreditInvoice(
-            InvoiceHeader header,
-            LocalInvoiceParty issuer,
-            ISequentialEnumerableStartingWithOne<NegativeRevenue> revenueItems,
-            InvoiceParty counterpart,
+        private CreditInvoice(
+            InvoiceInfo info,
+            ISequenceStartingWithOne<NegativeRevenue> revenueItems,
             INonEmptyEnumerable<NegativePayment> payments,
+            InvoiceParty counterpart,
             long? correlatedInvoice = null)
-            : base(header, issuer, revenueItems, payments, counterpart, correlatedInvoice)
         {
-            if (counterpart == null)
-            {
-                throw new ArgumentNullException(nameof(counterpart));
-            }
+            Info = info;
+            RevenueItems = revenueItems;
+            Payments = payments;
+            Counterpart = counterpart;
+            CorrelatedInvoice = correlatedInvoice.ToOption();
+        }
+
+        public InvoiceInfo Info { get; }
+
+        public ISequenceStartingWithOne<NegativeRevenue> RevenueItems { get; }
+
+        public INonEmptyEnumerable<NegativePayment> Payments { get; }
+
+        public InvoiceParty Counterpart { get; }
+
+        public IOption<long> CorrelatedInvoice { get; }
+
+        public static ITry<CreditInvoice, IEnumerable<Error>> Create(
+            InvoiceInfo info,
+            ISequenceStartingWithOne<NegativeRevenue> revenueItems,
+            INonEmptyEnumerable<NegativePayment> payments,
+            InvoiceParty counterPart,
+            long? correlatedInvoice = null)
+        {
+            return Try.Aggregate(
+                ObjectExtensions.NotNull(info),
+                ObjectExtensions.NotNull(revenueItems),
+                ObjectExtensions.NotNull(payments),
+                ObjectExtensions.NotNull(counterPart),
+                (i, r, p, c) => new CreditInvoice(i, r, p, c, correlatedInvoice)
+            );
         }
     }
 }

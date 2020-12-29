@@ -1,16 +1,32 @@
-﻿using Mews.Fiscalization.Core.Model;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
+using System.Collections.Generic;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class RetailSalesReceipt : Invoice
+    public sealed class RetailSalesReceipt
     {
-        public RetailSalesReceipt(
-            InvoiceHeader header,
-            LocalInvoiceParty issuer,
-            ISequentialEnumerableStartingWithOne<NonNegativeRevenue> revenueItems,
-            INonEmptyEnumerable<NonNegativePayment> payments)
-            : base(header, issuer, revenueItems, payments)
+        private RetailSalesReceipt(InvoiceInfo info, ISequenceStartingWithOne<NonNegativeRevenue> revenueItems, INonEmptyEnumerable<NonNegativePayment> payments)
         {
+            Info = info;
+            RevenueItems = revenueItems;
+            Payments = payments;
+        }
+
+        public InvoiceInfo Info { get; }
+
+        public ISequenceStartingWithOne<NonNegativeRevenue> RevenueItems { get; }
+
+        public INonEmptyEnumerable<NonNegativePayment> Payments { get; }
+
+        public static ITry<RetailSalesReceipt, IEnumerable<Error>> Create(InvoiceInfo info, ISequenceStartingWithOne<NonNegativeRevenue> revenueItems, INonEmptyEnumerable<NonNegativePayment> payments)
+        {
+            return Try.Aggregate(
+                ObjectExtensions.NotNull(info),
+                ObjectExtensions.NotNull(revenueItems),
+                ObjectExtensions.NotNull(payments),
+                (i, r, p) => new RetailSalesReceipt(i, r, p)
+            );
         }
     }
 }

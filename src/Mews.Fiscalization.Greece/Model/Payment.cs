@@ -1,18 +1,39 @@
-﻿using Mews.Fiscalization.Greece.Model.Types;
-using System;
+﻿using FuncSharp;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public abstract class Payment
+    public sealed class Payment : Coproduct2<NonNegativePayment, NegativePayment>
     {
-        public Payment(Amount amount, PaymentType paymentType)
+        public Payment(NonNegativePayment nonNegativePayment)
+            : base(nonNegativePayment)
         {
-            Amount = amount ?? throw new ArgumentNullException(nameof(amount));
-            PaymentType = paymentType;
         }
 
-        public Amount Amount { get; }
+        public Payment(NegativePayment negativePayment)
+            : base(negativePayment)
+        {
+        }
 
-        public PaymentType PaymentType { get; }
+        public decimal Amount
+        {
+            get
+            {
+                return Match(
+                    nonNegativePayment => nonNegativePayment.Amount.Value,
+                    negativePayment => negativePayment.Amount.Value
+                );
+            }
+        }
+
+        public PaymentType PaymentType
+        {
+            get
+            {
+                return Match(
+                    nonNegativePayment => nonNegativePayment.PaymentType,
+                    negativePayment => negativePayment.PaymentType
+                );
+            }
+        }
     }
 }

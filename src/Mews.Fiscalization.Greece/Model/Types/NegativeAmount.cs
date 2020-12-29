@@ -1,18 +1,24 @@
-﻿using Mews.Fiscalization.Core.Model;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
 
-namespace Mews.Fiscalization.Greece.Model.Types
+namespace Mews.Fiscalization.Greece.Model
 {
-    public class NegativeAmount : Amount
+    public sealed class NegativeAmount
     {
-        private static readonly DecimalLimitation Limitation = new DecimalLimitation(max: 0, maxIsAllowed: false);
-        public NegativeAmount(decimal value)
-            : base(value, Limitation)
+        private NegativeAmount(decimal value)
         {
+            Value = value;
         }
 
-        public static bool IsValid(decimal value)
+        public decimal Value { get; }
+
+        public static ITry<NegativeAmount, Error> Create(decimal value)
         {
-            return Amount.IsValid(value, Limitation);
+            return DecimalValidations.MaxDecimalPlaces(value, 2).FlatMap(v =>
+            {
+                var validNumber = DecimalValidations.SmallerThan(v, 0);
+                return validNumber.Map(n => new NegativeAmount(n));
+            });
         }
     }
 }

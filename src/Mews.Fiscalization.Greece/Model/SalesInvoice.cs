@@ -1,22 +1,44 @@
-﻿using Mews.Fiscalization.Core.Model;
-using System;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
+using System.Collections.Generic;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class SalesInvoice : Invoice
+    public sealed class SalesInvoice
     {
-        public SalesInvoice(
-            InvoiceHeader header,
-            LocalInvoiceParty issuer,
-            ISequentialEnumerableStartingWithOne<NonNegativeRevenue> revenueItems,
-            InvoiceParty counterpart,
-            INonEmptyEnumerable<NonNegativePayment> payments)
-            : base(header, issuer, revenueItems, payments, counterpart)
+        private SalesInvoice(
+            InvoiceInfo info,
+            ISequenceStartingWithOne<NonNegativeRevenue> revenueItems,
+            INonEmptyEnumerable<NonNegativePayment> payments,
+            InvoiceParty counterpart)
         {
-            if (counterpart == null)
-            {
-                throw new ArgumentNullException(nameof(counterpart));
-            }
+            Info = info;
+            RevenueItems = revenueItems;
+            Payments = payments;
+            Counterpart = counterpart;
+        }
+
+        public InvoiceInfo Info { get; }
+
+        public ISequenceStartingWithOne<NonNegativeRevenue> RevenueItems { get; }
+
+        public INonEmptyEnumerable<NonNegativePayment> Payments { get; }
+
+        public InvoiceParty Counterpart { get; }
+
+        public static ITry<SalesInvoice, IEnumerable<Error>> Create(
+            InvoiceInfo info,
+            ISequenceStartingWithOne<NonNegativeRevenue> revenueItems,
+            INonEmptyEnumerable<NonNegativePayment> payments,
+            InvoiceParty counterpart)
+        {
+            return Try.Aggregate(
+                ObjectExtensions.NotNull(info),
+                ObjectExtensions.NotNull(revenueItems),
+                ObjectExtensions.NotNull(payments),
+                ObjectExtensions.NotNull(counterpart),
+                (i, r, p, c) => new SalesInvoice(i, r, p, c)
+            );
         }
     }
 }

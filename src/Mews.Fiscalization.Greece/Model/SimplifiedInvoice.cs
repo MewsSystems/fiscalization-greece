@@ -1,21 +1,37 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FuncSharp;
 using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class SimplifiedInvoice : Invoice
+    public sealed class SimplifiedInvoice
     {
-        public SimplifiedInvoice(
-            InvoiceHeader header,
-            LocalInvoiceParty issuer,
-            ISequentialEnumerableStartingWithOne<NonNegativeRevenue> revenueItems,
-            INonEmptyEnumerable<NonNegativePayment> payments)
-            : base(header, issuer, revenueItems, payments)
+        private SimplifiedInvoice(InvoiceInfo info, ISequenceStartingWithOne<NonNegativeRevenue> revenueItems, INonEmptyEnumerable<NonNegativePayment> payments)
         {
-            if (header.CurrencyCode.IsNull() || header.CurrencyCode.Value == "EUR")
+            Info = info;
+            RevenueItems = revenueItems;
+            Payments = payments;
+            if (Info.Header.CurrencyCode.IsNull() || info.Header.CurrencyCode.Value == "EUR")
             {
-                Check.Condition(revenueItems.Sum(i => i.Value.NetValue.Value + i.Value.VatValue.Value) <= 100, "Simplified Invoice can only be below 100 EUR.");
+                Check.Condition(RevenueItems.Values.Sum(i => i.Value.NetValue.Value + i.Value.VatValue.Value) <= 100, $"{nameof(SimplifiedInvoice)} can only be below 100 EUR.");
             }
+        }
+
+        public InvoiceInfo Info { get; }
+
+        public ISequenceStartingWithOne<NonNegativeRevenue> RevenueItems { get; }
+
+        public INonEmptyEnumerable<NonNegativePayment> Payments { get; }
+
+        public static ITry<SimplifiedInvoice, IEnumerable<Error>> Create(InvoiceInfo info, ISequenceStartingWithOne<NonNegativeRevenue> revenueItems, INonEmptyEnumerable<NonNegativePayment> payments)
+        {
+            return Try.Aggregate(
+                ObjectExtensions.NotNull(info),
+                ObjectExtensions.NotNull(revenueItems),
+                ObjectExtensions.NotNull(payments),
+                (i, r, p) => new SimplifiedInvoice(i, r, p)
+            );
         }
     }
 }

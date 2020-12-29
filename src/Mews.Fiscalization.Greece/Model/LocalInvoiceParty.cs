@@ -1,13 +1,27 @@
-﻿using Mews.Fiscalization.Core.Model;
-using Mews.Fiscalization.Greece.Model.Types;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class LocalInvoiceParty : InvoiceParty
+    public sealed class LocalInvoiceParty
     {
-        public LocalInvoiceParty(GreekTaxIdentifier taxIdentifier, NonNegativeInt branch = null, string name = null, Address address = null)
-            : base(Country.Greece, taxIdentifier: taxIdentifier, branch, name ,address)
+        private LocalInvoiceParty(InvoicePartyInfo info, Country country)
         {
+            Info = info;
+            Country = country;
+        }
+
+        public InvoicePartyInfo Info { get; }
+
+        public Country Country { get; }
+
+        public static ITry<LocalInvoiceParty, Error> Create(InvoicePartyInfo info, Country country)
+        {
+            return ObjectValidations.NotNull(info).FlatMap(i =>
+            {
+                var validCountry = country.ToTry(c => c.Alpha2Code == "GR", _ => new Error($"Country must be Greece for this invoice type: {nameof(LocalInvoiceParty)}"));
+                return validCountry.Map(c => new LocalInvoiceParty(i, c));
+            });
         }
     }
 }

@@ -1,14 +1,27 @@
-﻿using Mews.Fiscalization.Core.Model;
-using Mews.Fiscalization.Greece.Model.Types;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class ForeignInvoiceParty : InvoiceParty
+    public sealed class ForeignInvoiceParty
     {
-        public ForeignInvoiceParty(Country country, NonEmptyString taxIdentifier = null, NonNegativeInt branch = null, string name = null, Address address = null)
-            : base(country, taxIdentifier, branch, name, address)
+        private ForeignInvoiceParty(InvoicePartyInfo info, Country country)
         {
-            Check.Condition(country.Code != Country.Greece.Code, "Foreign counterpart cannot use greece as a country.");
+            Country = country;
+            Info = info;
+        }
+
+        public InvoicePartyInfo Info { get; }
+
+        public Country Country { get; }
+
+        public static ITry<ForeignInvoiceParty, Error> Create(InvoicePartyInfo info, Country country)
+        {
+            return ObjectValidations.NotNull(info).FlatMap(i =>
+            {
+                var validCountry = country.ToTry(c => c.Alpha2Code != "GR", _ => new Error($"{nameof(ForeignInvoiceParty)} cannot use greece as a country.")) ;
+                return validCountry.Map(c => new ForeignInvoiceParty(i, c));
+            });
         }
     }
 }

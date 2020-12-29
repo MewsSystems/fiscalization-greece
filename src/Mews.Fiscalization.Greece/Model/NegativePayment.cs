@@ -1,12 +1,23 @@
-﻿using Mews.Fiscalization.Greece.Model.Types;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class NegativePayment : Payment
+    public sealed class NegativePayment
     {
-        public NegativePayment(NegativeAmount amount, PaymentType paymentType)
-            : base(amount, paymentType)
+        private NegativePayment(NegativeAmount amount, PaymentType paymentType)
         {
+            Amount = amount;
+            PaymentType = paymentType;
+        }
+
+        public NegativeAmount Amount { get; }
+
+        public PaymentType PaymentType { get; }
+
+        public static ITry<NegativePayment, Error> Create(NegativeAmount amount, PaymentType paymentType)
+        {
+            return ObjectValidations.NotNull(amount).Map(a => new NegativePayment(a, paymentType));
         }
     }
 }

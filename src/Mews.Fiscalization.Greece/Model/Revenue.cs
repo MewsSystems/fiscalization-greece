@@ -1,37 +1,65 @@
-﻿using Mews.Fiscalization.Greece.Model.Types;
-using System;
+﻿using FuncSharp;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public abstract class Revenue
+    public sealed class Revenue : Coproduct2<NonNegativeRevenue, NegativeRevenue>
     {
-        public Revenue(
-            Amount netValue,
-            Amount vatValue,
-            TaxType taxType,
-            RevenueType revenueType,
-            VatExemptionType? vatExemption = null)
+        public Revenue(NonNegativeRevenue nonNegativeRevenue)
+            : base(nonNegativeRevenue)
         {
-            NetValue = netValue ?? throw new ArgumentNullException(nameof(netValue));
-            VatValue = vatValue ?? throw new ArgumentNullException(nameof(vatValue));
-            TaxType = taxType;
-            RevenueType = revenueType;
-            VatExemption = vatExemption;
+        }
 
-            if (taxType == TaxType.Vat0 && !vatExemption.HasValue)
+        public Revenue(NegativeRevenue negativeRevenue)
+            : base(negativeRevenue)
+        {
+        }
+
+        public decimal NetValue
+        {
+            get
             {
-                throw new ArgumentException($"{nameof(VatExemption)} must be specified when TaxType is {taxType}");
+                return Match(
+                    nonNegativeRevenue => nonNegativeRevenue.NetValue.Value,
+                    negativeRevenue => negativeRevenue.NetValue.Value
+                );
             }
         }
 
-        public Amount NetValue { get; }
+        public decimal VatValue
+        {
+            get
+            {
+                return Match(
+                    nonNegativeRevenue => nonNegativeRevenue.VatValue.Value,
+                    negativeRevenue => negativeRevenue.VatValue.Value
+                );
+            }
+        }
 
-        public Amount VatValue { get; }
+        public RevenueInfo Info
+        {
+            get
+            {
+                return Match(
+                    nonNegativeRevenue => nonNegativeRevenue.Info,
+                    negativeRevenue => negativeRevenue.Info
+                );
+            }
+        }
 
-        public TaxType TaxType { get; }
+        public TaxType TaxType
+        {
+            get { return Info.TaxType; }
+        }
 
-        public RevenueType RevenueType { get; }
+        public IOption<VatExemptionType> VatExemption
+        {
+            get { return Info.VatExemption; }
+        }
 
-        public VatExemptionType? VatExemption { get; }
+        public RevenueType RevenueType
+        {
+            get { return Info.RevenueType; }
+        }
     }
 }

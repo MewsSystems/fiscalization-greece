@@ -1,17 +1,32 @@
-﻿using Mews.Fiscalization.Greece.Model.Types;
+﻿using FuncSharp;
+using Mews.Fiscalization.Core.Model;
+using System.Collections.Generic;
 
 namespace Mews.Fiscalization.Greece.Model
 {
-    public class NonNegativeRevenue : Revenue
+    public sealed class NonNegativeRevenue
     {
-        public NonNegativeRevenue(
-            NonNegativeAmount netValue,
-            NonNegativeAmount vatValue,
-            TaxType taxType,
-            RevenueType revenueType,
-            VatExemptionType? vatExemption = null)
-            : base(netValue, vatValue, taxType, revenueType, vatExemption)
+        private NonNegativeRevenue(NonNegativeAmount netValue, NonNegativeAmount vatValue, RevenueInfo info)
         {
+            NetValue = netValue;
+            VatValue = vatValue;
+            Info = info;
+        }
+
+        public NonNegativeAmount NetValue { get; }
+
+        public NonNegativeAmount VatValue { get; }
+
+        public RevenueInfo Info { get; }
+
+        public static ITry<NonNegativeRevenue, IEnumerable<Error>> Create(NonNegativeAmount netValue, NonNegativeAmount vatValue, RevenueInfo info)
+        {
+            return Try.Aggregate(
+                ObjectExtensions.NotNull(netValue),
+                ObjectExtensions.NotNull(vatValue),
+                ObjectExtensions.NotNull(info),
+                (n, v, i) => new NonNegativeRevenue(n, v, i)
+            );
         }
     }
 }
