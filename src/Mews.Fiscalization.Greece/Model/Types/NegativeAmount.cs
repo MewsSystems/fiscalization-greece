@@ -12,7 +12,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public decimal Value { get; }
 
-        public static ITry<NegativeAmount, Error> Create(decimal value)
+        public static ITry<NegativeAmount, INonEmptyEnumerable<Error>> Create(decimal value)
         {
             return DecimalValidations.MaxDecimalPlaces(value, 2).FlatMap(v =>
             {

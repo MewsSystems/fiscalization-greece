@@ -21,7 +21,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public IOption<Address> Address { get; }
 
-        public static ITry<InvoicePartyInfo, Error> Create(NonNegativeInt branch, TaxpayerIdentificationNumber taxpayerNumber = null, string name = null, Address address = null)
+        public static ITry<InvoicePartyInfo, INonEmptyEnumerable<Error>> Create(NonNegativeInt branch, TaxpayerIdentificationNumber taxpayerNumber = null, string name = null, Address address = null)
         {
             return ObjectValidations.NotNull(branch).Map(b => new InvoicePartyInfo(b, taxpayerNumber, name, address));
         }

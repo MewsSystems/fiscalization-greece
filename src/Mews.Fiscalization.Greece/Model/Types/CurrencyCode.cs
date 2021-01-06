@@ -18,7 +18,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public string Value { get; }
 
-        public static ITry<CurrencyCode, Core.Model.Error> Create(string value)
+        public static ITry<CurrencyCode, INonEmptyEnumerable<Core.Model.Error>> Create(string value)
         {
             return StringValidations.In(value, AllowedValues).Map(v => new CurrencyCode(v));
         }

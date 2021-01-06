@@ -15,11 +15,11 @@ namespace Mews.Fiscalization.Greece.Model
 
         public Country Country { get; }
 
-        public static ITry<LocalInvoiceParty, Error> Create(InvoicePartyInfo info, Country country)
+        public static ITry<LocalInvoiceParty, INonEmptyEnumerable<Error>> Create(InvoicePartyInfo info, Country country)
         {
             return ObjectValidations.NotNull(info).FlatMap(i =>
             {
-                var validCountry = country.ToTry(c => c.Alpha2Code == "GR", _ => new Error($"Country must be Greece for this invoice type: {nameof(LocalInvoiceParty)}"));
+                var validCountry = country.ToTry(c => c.Alpha2Code == "GR", _ => Error.Create($"Country must be Greece for this invoice type: {nameof(LocalInvoiceParty)}"));
                 return validCountry.Map(c => new LocalInvoiceParty(i, c));
             });
         }
