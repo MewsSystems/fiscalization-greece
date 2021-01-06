@@ -37,11 +37,11 @@ namespace Mews.Fiscalization.Greece.Model
             }
         }
 
-        public static ITry<InvoiceParty, Error> Create(InvoicePartyInfo info, Country country)
+        public static ITry<InvoiceParty, INonEmptyEnumerable<Error>> Create(InvoicePartyInfo info, Country country)
         {
             if (info.IsNull())
             {
-                Try.Error<InvoiceParty, Error>(new Error($"{nameof(info)} cannot be null."));
+                return Try.Error<InvoiceParty, INonEmptyEnumerable<Error>>(Error.Create($"{nameof(info)} cannot be null."));
             }
 
             return ObjectValidations.NotNull(country).FlatMap(c => c.Match(

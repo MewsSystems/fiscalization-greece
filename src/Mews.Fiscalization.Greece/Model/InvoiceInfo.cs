@@ -15,7 +15,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public InvoiceParty Issuer { get; }
 
-        public static ITry<InvoiceInfo, Error> Create(InvoiceHeader header, InvoiceParty issuer)
+        public static ITry<InvoiceInfo, INonEmptyEnumerable<Error>> Create(InvoiceHeader header, InvoiceParty issuer)
         {
             return ObjectValidations.NotNull(header).FlatMap(h =>
             {

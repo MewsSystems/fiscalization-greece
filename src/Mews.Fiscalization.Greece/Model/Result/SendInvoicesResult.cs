@@ -17,7 +17,7 @@ namespace Mews.Fiscalization.Greece.Model.Result
             ))));
         }
 
-        public ITry<ISequenceStartingWithOne<SendInvoiceResult>, Core.Model.Error> SendInvoiceResults { get; }
+        public ITry<ISequenceStartingWithOne<SendInvoiceResult>, INonEmptyEnumerable<Core.Model.Error>> SendInvoiceResults { get; }
 
         private string MapErrorCode(string errorCode, StatusCode statusCode)
         {

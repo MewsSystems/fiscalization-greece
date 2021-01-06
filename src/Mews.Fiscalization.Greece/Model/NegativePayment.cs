@@ -15,7 +15,7 @@ namespace Mews.Fiscalization.Greece.Model
 
         public PaymentType PaymentType { get; }
 
-        public static ITry<NegativePayment, Error> Create(NegativeAmount amount, PaymentType paymentType)
+        public static ITry<NegativePayment, INonEmptyEnumerable<Error>> Create(NegativeAmount amount, PaymentType paymentType)
         {
             return ObjectValidations.NotNull(amount).Map(a => new NegativePayment(a, paymentType));
         }
