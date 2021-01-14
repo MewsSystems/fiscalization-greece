@@ -24,7 +24,7 @@ namespace Mews.Fiscalization.Greece.Mapper
             return new Dto.Xsd.Invoice
             {
                 InvoiceId = invoice.Info.Header.InvoiceIdentifier,
-                InvoiceIssuer = GetInvoiceParty(invoice.Issuer.ToOption()),
+                InvoiceIssuer = GetInvoiceParty(invoice.Info.Issuer.ToOption()),
                 InvoiceCounterpart = GetInvoiceParty(invoice.Counterpart),
                 InvoiceSummary = GetInvoiceSummary(invoice),
                 InvoiceHeader = GetInvoiceHeader(invoice),
