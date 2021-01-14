@@ -38,10 +38,10 @@ namespace Mews.Fiscalization.Greece.Model
             long? correlatedInvoice = null)
         {
             return Try.Aggregate(
-                ObjectExtensions.NotNull(info),
-                ObjectExtensions.NotNull(revenueItems),
-                ObjectExtensions.NotNull(payments),
-                ObjectExtensions.NotNull(counterPart),
+                ObjectValidations.NotNull(info),
+                ObjectValidations.NotNull(revenueItems),
+                ObjectValidations.NotNull(payments),
+                ObjectValidations.NotNull(counterPart),
                 (i, r, p, c) => new CreditInvoice(i, r, p, c, correlatedInvoice)
             );
         }

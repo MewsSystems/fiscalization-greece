@@ -46,20 +46,5 @@ namespace Mews.Fiscalization.Greece.Model
                 );
             }
         }
-
-        public TaxType TaxType
-        {
-            get { return Info.TaxType; }
-        }
-
-        public IOption<VatExemptionType> VatExemption
-        {
-            get { return Info.VatExemption; }
-        }
-
-        public RevenueType RevenueType
-        {
-            get { return Info.RevenueType; }
-        }
     }
 }

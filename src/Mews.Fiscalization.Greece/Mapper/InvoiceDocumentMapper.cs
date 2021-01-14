@@ -9,7 +9,7 @@ namespace Mews.Fiscalization.Greece.Mapper
 {
     public static class InvoiceDocumentMapper
     {
-        private const string GreeceCountryCode = "GR";
+        private static readonly Country Greece = Countries.Greece;
 
         public static Dto.Xsd.InvoicesDoc GetInvoiceDoc(ISequenceStartingWithOne<Invoice> invoices)
         {
@@ -91,15 +91,16 @@ namespace Mews.Fiscalization.Greece.Mapper
         private static Dto.Xsd.InvoiceDetail GetInvoiceDetail(Invoice invoice, Indexed<Revenue> indexedRevenueItem)
         {
             var revenueItem = indexedRevenueItem.Value;
+            var info = revenueItem.Info;
             return new Dto.Xsd.InvoiceDetail
             {
                 LineNumber = indexedRevenueItem.Index,
                 NetValue = Math.Abs(revenueItem.NetValue),
                 VatAmount = Math.Abs(revenueItem.VatValue),
-                VatCategory = MapVatCategory(revenueItem.TaxType),
+                VatCategory = MapVatCategory(info.TaxType),
                 IncomeClassification = new[] { GetIncomeClassification(invoice, revenueItem) },
-                VatExemptionCategorySpecified = revenueItem.VatExemption.NonEmpty,
-                VatExemptionCategory = revenueItem.VatExemption.Match(
+                VatExemptionCategorySpecified = info.VatExemption.NonEmpty,
+                VatExemptionCategory = info.VatExemption.Match(
                     c => MapVatExemptionCategory(c),
                     _ => (Dto.Xsd.VatExemptionCategory?)null
                 )
@@ -115,7 +116,7 @@ namespace Mews.Fiscalization.Greece.Mapper
             };
 
             invoiceSummary.IncomeClassification = invoice.RevenueItems.Values.GroupBy(
-                keySelector: m => m.Value.RevenueType,
+                keySelector: m => m.Value.Info.RevenueType,
                 resultSelector: (key, revenueItems) => new Dto.Xsd.IncomeClassification
                 {
                     ClassificationCategory = MapRevenueClassification(invoice, key).Category,
@@ -132,7 +133,7 @@ namespace Mews.Fiscalization.Greece.Mapper
 
         private static Dto.Xsd.IncomeClassification GetIncomeClassification(Invoice invoice, Revenue revenue)
         {
-            var revenueClassification = MapRevenueClassification(invoice, revenue.RevenueType);
+            var revenueClassification = MapRevenueClassification(invoice, revenue.Info.RevenueType);
 
             return new Dto.Xsd.IncomeClassification
             {
@@ -149,7 +150,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 {
                     var info = invoice.Info;
                     var country = invoice.Counterpart.Get(_ => new Exception("Counterpart is mandatory on this invoice type")).Country;
-                    if (country.Alpha2Code == GreeceCountryCode)
+                    if (country == Greece)
                     {
                         return Dto.Xsd.InvoiceType.SalesInvoice;
                     }
@@ -189,7 +190,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 salesInvoice =>
                 {
                     var country = invoice.Counterpart.Get(_ => new Exception("Counterpart is mandatory on this invoice type")).Country;
-                    if (country.Alpha2Code == GreeceCountryCode)
+                    if (country == Greece)
                     {
                         return Dto.Xsd.IncomeClassificationType.OtherSalesOfGoodsAndServices;
                     }

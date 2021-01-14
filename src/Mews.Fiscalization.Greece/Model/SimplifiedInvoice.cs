@@ -12,10 +12,6 @@ namespace Mews.Fiscalization.Greece.Model
             Info = info;
             RevenueItems = revenueItems;
             Payments = payments;
-            if (Info.Header.CurrencyCode.IsNull() || info.Header.CurrencyCode.Value == "EUR")
-            {
-                Check.Condition(RevenueItems.Values.Sum(i => i.Value.NetValue.Value + i.Value.VatValue.Value) <= 100, $"{nameof(SimplifiedInvoice)} can only be below 100 EUR.");
-            }
         }
 
         public InvoiceInfo Info { get; }
@@ -26,12 +22,26 @@ namespace Mews.Fiscalization.Greece.Model
 
         public static ITry<SimplifiedInvoice, IEnumerable<Error>> Create(InvoiceInfo info, ISequenceStartingWithOne<NonNegativeRevenue> revenueItems, INonEmptyEnumerable<NonNegativePayment> payments)
         {
-            return Try.Aggregate(
-                ObjectExtensions.NotNull(info),
-                ObjectExtensions.NotNull(revenueItems),
-                ObjectExtensions.NotNull(payments),
-                (i, r, p) => new SimplifiedInvoice(i, r, p)
+            var result = Try.Aggregate(
+                ObjectValidations.NotNull(info),
+                ObjectValidations.NotNull(revenueItems),
+                ObjectValidations.NotNull(payments),
+                (i, r, p) => IsValidSimplifiedInvoice(i, r).Match(
+                    t => Try.Success<SimplifiedInvoice, IEnumerable<Error>>(new SimplifiedInvoice(i, r, p)),
+                    f => Try.Error<SimplifiedInvoice, IEnumerable<Error>>(new Error($"{nameof(SimplifiedInvoice)} can only be below 100 EUR.").ToEnumerable())
+                )
             );
+
+            return result.FlatMap(r => r);
+        }
+
+        private static bool IsValidSimplifiedInvoice(InvoiceInfo info, ISequenceStartingWithOne<NonNegativeRevenue> revenueItems)
+        {
+            if (info.Header.CurrencyCode.IsNull() || info.Header.CurrencyCode.Value == "EUR")
+            {
+                return revenueItems.Values.Sum(i => i.Value.NetValue.Value + i.Value.VatValue.Value) <= 100;
+            }
+            return true;
         }
     }
 }

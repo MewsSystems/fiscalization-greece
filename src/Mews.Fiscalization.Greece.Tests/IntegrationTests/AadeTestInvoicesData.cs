@@ -53,10 +53,10 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             return RevenueInfo.Create(taxType, revenueType, vatExemptionType).Success.Get();
         }
 
-        internal static InvoiceParty CreateInvoiceParty(Country country, string taxNumber, int branch = 0, string name = null, Address address = null)
+        internal static InvoiceParty CreateInvoiceParty(Country country, string taxNumber, string name = null, Address address = null)
         {
             return InvoiceParty.Create(
-                info: InvoicePartyInfo.Create(NonNegativeInt.CreateUnsafe(branch), TaxpayerIdentificationNumber.Create(country, taxNumber).Success.Get(), name, address).Success.Get(),
+                info: InvoicePartyInfo.Create(NonNegativeInt.Zero(), TaxpayerIdentificationNumber.Create(country, taxNumber).Success.Get(), name, address).Success.Get(),
                 country: country
             ).Success.Get();
         }

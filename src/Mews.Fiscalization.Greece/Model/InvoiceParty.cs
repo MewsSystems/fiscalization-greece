@@ -39,22 +39,19 @@ namespace Mews.Fiscalization.Greece.Model
 
         public static ITry<InvoiceParty, INonEmptyEnumerable<Error>> Create(InvoicePartyInfo info, Country country)
         {
-            if (info.IsNull())
+            return ObjectValidations.NotNull(country).FlatMap(c =>
             {
-                return Try.Error<InvoiceParty, INonEmptyEnumerable<Error>>(Error.Create($"{nameof(info)} cannot be null."));
-            }
-
-            return ObjectValidations.NotNull(country).FlatMap(c => c.Match(
-                europeanUnionCountry =>
+                var validatedInfo = ObjectValidations.NotNull(info);
+                return validatedInfo.FlatMap(i =>
                 {
-                    if (europeanUnionCountry.Alpha2Code == "GR")
+                    if (c == Countries.Greece)
                     {
-                        return LocalInvoiceParty.Create(info, Countries.GetByCode(europeanUnionCountry.Alpha2Code).Get()).Map(p => new InvoiceParty(p));
+                        return LocalInvoiceParty.Create(i).Map(p => new InvoiceParty(p));
                     }
-                    return ForeignInvoiceParty.Create(info, Countries.GetByCode(europeanUnionCountry.Alpha2Code).Get()).Map(p => new InvoiceParty(p));
-                },
-                nonEuropeanUnionCountry => ForeignInvoiceParty.Create(info, Countries.GetByCode(nonEuropeanUnionCountry.Alpha2Code).Get()).Map(p => new InvoiceParty(p))
-            ));
+
+                    return ForeignInvoiceParty.Create(i, c).Map(p => new InvoiceParty(p));
+                });
+            });
         }
     }
 }

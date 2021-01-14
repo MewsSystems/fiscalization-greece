@@ -33,10 +33,10 @@ namespace Mews.Fiscalization.Greece.Model
             InvoiceParty counterpart)
         {
             return Try.Aggregate(
-                ObjectExtensions.NotNull(info),
-                ObjectExtensions.NotNull(revenueItems),
-                ObjectExtensions.NotNull(payments),
-                ObjectExtensions.NotNull(counterpart),
+                ObjectValidations.NotNull(info),
+                ObjectValidations.NotNull(revenueItems),
+                ObjectValidations.NotNull(payments),
+                ObjectValidations.NotNull(counterpart),
                 (i, r, p, c) => new SalesInvoice(i, r, p, c)
             );
         }
