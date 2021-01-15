@@ -26,9 +26,9 @@ namespace Mews.Fiscalization.Greece.Model
                 ObjectValidations.NotNull(info),
                 ObjectValidations.NotNull(revenueItems),
                 ObjectValidations.NotNull(payments),
-                (i, r, p) => IsValidSimplifiedInvoice(i, r).Match(
-                    t => Try.Success<SimplifiedInvoice, IEnumerable<Error>>(new SimplifiedInvoice(i, r, p)),
-                    f => Try.Error<SimplifiedInvoice, IEnumerable<Error>>(new Error($"{nameof(SimplifiedInvoice)} can only be below 100 EUR.").ToEnumerable())
+                (i, r, p) => IsValidSimplifiedInvoice(i, r).ToTry(
+                    t => new SimplifiedInvoice(i, r, p),
+                    f => new Error($"{nameof(SimplifiedInvoice)} can only be below or equal to 100 EUR.").ToEnumerable()
                 )
             );
 

@@ -9,7 +9,6 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
 {
     internal static class AadeTestInvoicesData
     {
-        public static readonly Country Greece = Countries.Greece;
         private static readonly string UserVatNumber = Environment.GetEnvironmentVariable("user_vat_number") ?? "INSERT_USER_VAT_NUMBER";
 
         public static IEnumerable<object[]> GetInvoices()
@@ -44,7 +43,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                     currencyCode: CurrencyCode.Create(currencyCode).Success.Get(),
                     exchangeRate: exchangeRate.IsNotNull().Match(t => ExchangeRate.Create(exchangeRate.Value).Success.Get(), f => null)
                 ),
-                issuer: CreateInvoiceParty(Greece, UserVatNumber)
+                issuer: CreateInvoiceParty(Countries.Greece, UserVatNumber)
             ).Success.Get();
         }
 
@@ -94,7 +93,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         NonNegativePayment.Create(NonNegativeAmount.Create(100m).Success.Get(), PaymentType.OnCredit).Success.Get(),
                         NonNegativePayment.Create(NonNegativeAmount.Create(100m).Success.Get(), PaymentType.DomesticPaymentsAccountNumber).Success.Get()
                     ),
-                    counterpart: CreateInvoiceParty(Greece, "090701900")
+                    counterpart: CreateInvoiceParty(Countries.Greece, "090701900")
                 ).Success.Get())
             ));
         }
@@ -114,7 +113,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         NonNegativePayment.Create(NonNegativeAmount.Create(100m).Success.Get(), PaymentType.OnCredit).Success.Get(),
                         NonNegativePayment.Create(NonNegativeAmount.Create(100m).Success.Get(), PaymentType.DomesticPaymentsAccountNumber).Success.Get()
                     ),
-                    counterpart: CreateInvoiceParty(Greece, "090701900", address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City")))
+                    counterpart: CreateInvoiceParty(Countries.Greece, "090701900", address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City")))
                 ).Success.Get())
             ));
         }
@@ -153,7 +152,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         NegativePayment.Create(NegativeAmount.Create(-100m).Success.Get(), PaymentType.OnCredit).Success.Get(),
                         NegativePayment.Create(NegativeAmount.Create(-100m).Success.Get(), PaymentType.DomesticPaymentsAccountNumber).Success.Get()
                     ),
-                    counterPart: CreateInvoiceParty(Greece, "090701900", address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City")))
+                    counterPart: CreateInvoiceParty(Countries.Greece, "090701900", address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City")))
                 ).Success.Get())
             ));
         }
@@ -173,7 +172,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
                         NegativePayment.Create(NegativeAmount.Create(-100m).Success.Get(), PaymentType.OnCredit).Success.Get(),
                         NegativePayment.Create(NegativeAmount.Create(-100m).Success.Get(), PaymentType.DomesticPaymentsAccountNumber).Success.Get()
                     ),
-                    counterPart: CreateInvoiceParty(Greece, "090701900", address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City")))
+                    counterPart: CreateInvoiceParty(Countries.Greece, "090701900", address: new Address(postalCode: NonEmptyString.CreateUnsafe("12"), city: NonEmptyString.CreateUnsafe("City")))
                 ).Success.Get())
             ));
         }

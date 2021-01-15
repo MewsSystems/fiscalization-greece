@@ -22,7 +22,7 @@ namespace Mews.Fiscalization.Greece.Model
         {
             if (taxType == TaxType.Vat0 && !vatExemptionType.HasValue)
             {
-                return Try.Error<RevenueInfo, Error>(new Error($"{nameof(VatExemption)} must be specified when TaxType is {nameof(TaxType)}"));
+                return Try.Error<RevenueInfo, Error>(new Error($"{nameof(VatExemption)} must be specified when TaxType is {taxType}"));
             }
             return Try.Success<RevenueInfo, Error>(new RevenueInfo(taxType, revenueType, vatExemptionType));
         }
