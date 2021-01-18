@@ -13,7 +13,6 @@
     <RepositoryUrl>https://github.com/MewsSystems/fiscalization-greece</RepositoryUrl>
     <Description>Client for MyData - Greek e-books platform.</Description>
     <Icon>https://raw.githubusercontent.com/msigut/eet/master/receipt.png</Icon>
-    <Version>1.0.1</Version>
   </PropertyGroup>
   
   <ItemGroup>
