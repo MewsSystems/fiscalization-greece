@@ -69,7 +69,7 @@ namespace Mews.Fiscalization.Greece
                         {
                             return BuildResponseDocWithErrors(SendInvoiceErrorCodes.UnauthorizedErrorCode, "Authorization error", invoicesDoc.Invoices);
                         }
-                        if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Forbidden && responseContent.Contains("this web is stopped"))
+                        if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Forbidden && responseContent.Contains("This web app is stopped"))
                         {
                             return BuildResponseDocWithErrors(SendInvoiceErrorCodes.TimeoutErrorCode, "Timeout", invoicesDoc.Invoices);
                         }
