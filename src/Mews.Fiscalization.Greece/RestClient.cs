@@ -63,16 +63,16 @@ namespace Mews.Fiscalization.Greece
                 buildResponseFunc:
                     async httpResponseMessage =>
                     {
+                        var responseContent = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: false);
+
                         if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                         {
                             return BuildResponseDocWithErrors(SendInvoiceErrorCodes.UnauthorizedErrorCode, "Authorization error", invoicesDoc.Invoices);
                         }
-                        if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                        if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Forbidden && responseContent.Contains("this web is stopped"))
                         {
-                            return BuildResponseDocWithErrors(SendInvoiceErrorCodes.ForbiddenErrorCode, "Forbidden", invoicesDoc.Invoices);
+                            return BuildResponseDocWithErrors(SendInvoiceErrorCodes.ForbiddenErrorCode, "Timeout", invoicesDoc.Invoices);
                         }
-
-                        var responseContent = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: false);
 
                         var responseDoc = XmlManipulator.Deserialize<ResponseDoc>(responseContent);
                         Logger?.Debug("Result received and successfully deserialized.", responseDoc);
