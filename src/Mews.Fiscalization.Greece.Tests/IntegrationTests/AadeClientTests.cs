@@ -51,7 +51,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
             // Act
 
             // Step 1 - regular invoice
-            var country = Countries.GetByCode("GR").Get();
+            var country = Countries.Greece;
             var invoices = SequenceStartingWithOne.FromPreordered(NonEmptyEnumerable.Create(
                 new Invoice(SalesInvoice.Create(
                     info: AadeTestInvoicesData.CreateInvoiceInfo(invoiceSerialNumber: "50021"),

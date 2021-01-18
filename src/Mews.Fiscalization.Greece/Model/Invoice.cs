@@ -38,11 +38,6 @@ namespace Mews.Fiscalization.Greece.Model
             }
         }
 
-        public InvoiceParty Issuer
-        {
-            get { return Info.Issuer; }
-        }
-
         public IOption<InvoiceParty> Counterpart
         {
             get

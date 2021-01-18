@@ -22,9 +22,9 @@ namespace Mews.Fiscalization.Greece.Model
         public static ITry<RetailSalesReceipt, IEnumerable<Error>> Create(InvoiceInfo info, ISequenceStartingWithOne<NonNegativeRevenue> revenueItems, INonEmptyEnumerable<NonNegativePayment> payments)
         {
             return Try.Aggregate(
-                ObjectExtensions.NotNull(info),
-                ObjectExtensions.NotNull(revenueItems),
-                ObjectExtensions.NotNull(payments),
+                ObjectValidations.NotNull(info),
+                ObjectValidations.NotNull(revenueItems),
+                ObjectValidations.NotNull(payments),
                 (i, r, p) => new RetailSalesReceipt(i, r, p)
             );
         }

@@ -19,7 +19,7 @@ namespace Mews.Fiscalization.Greece.Model
         {
             return ObjectValidations.NotNull(info).FlatMap(i =>
             {
-                var validCountry = country.ToTry(c => c.Alpha2Code != "GR", _ => Error.Create($"{nameof(ForeignInvoiceParty)} cannot use greece as a country.")) ;
+                var validCountry = country.ToTry(c => c != Countries.Greece, _ => Error.Create($"{nameof(ForeignInvoiceParty)} cannot use greece as a country.")) ;
                 return validCountry.Map(c => new ForeignInvoiceParty(i, c));
             });
         }

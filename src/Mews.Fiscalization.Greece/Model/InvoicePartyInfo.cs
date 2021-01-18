@@ -5,9 +5,9 @@ namespace Mews.Fiscalization.Greece.Model
 {
     public sealed class InvoicePartyInfo
     {
-        private InvoicePartyInfo(NonNegativeInt branch, TaxpayerIdentificationNumber taxIdentifier = null, string name = null, Address address = null)
+        private InvoicePartyInfo(NonNegativeInt? branch = null, TaxpayerIdentificationNumber taxIdentifier = null, string name = null, Address address = null)
         {
-            Branch = branch;
+            Branch = branch ?? NonNegativeInt.Zero();
             TaxIdentifier = taxIdentifier.ToOption();
             Name = name.ToOption();
             Address = address.ToOption();
@@ -21,9 +21,9 @@ namespace Mews.Fiscalization.Greece.Model
 
         public IOption<Address> Address { get; }
 
-        public static ITry<InvoicePartyInfo, INonEmptyEnumerable<Error>> Create(NonNegativeInt branch, TaxpayerIdentificationNumber taxpayerNumber = null, string name = null, Address address = null)
+        public static ITry<InvoicePartyInfo, INonEmptyEnumerable<Error>> Create(NonNegativeInt? branch = null, TaxpayerIdentificationNumber taxpayerNumber = null, string name = null, Address address = null)
         {
-            return ObjectValidations.NotNull(branch).Map(b => new InvoicePartyInfo(b, taxpayerNumber, name, address));
+            return ObjectValidations.NotNull(branch).Map(b => new InvoicePartyInfo(b ?? NonNegativeInt.Zero(), taxpayerNumber, name, address));
         }
     }
 }

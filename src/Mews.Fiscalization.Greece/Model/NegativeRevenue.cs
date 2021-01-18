@@ -22,9 +22,9 @@ namespace Mews.Fiscalization.Greece.Model
         public static ITry<NegativeRevenue, IEnumerable<Error>> Create(NegativeAmount netValue, NonPositiveAmount vatValue, RevenueInfo info)
         {
             return Try.Aggregate(
-                ObjectExtensions.NotNull(netValue),
-                ObjectExtensions.NotNull(vatValue),
-                ObjectExtensions.NotNull(info),
+                ObjectValidations.NotNull(netValue),
+                ObjectValidations.NotNull(vatValue),
+                ObjectValidations.NotNull(info),
                 (n, v, i) => new NegativeRevenue(n, v, i)
             );
         }
