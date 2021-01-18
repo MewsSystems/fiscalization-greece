@@ -71,7 +71,7 @@ namespace Mews.Fiscalization.Greece
                         }
                         if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Forbidden && responseContent.Contains("this web is stopped"))
                         {
-                            return BuildResponseDocWithErrors(SendInvoiceErrorCodes.ForbiddenErrorCode, "Timeout", invoicesDoc.Invoices);
+                            return BuildResponseDocWithErrors(SendInvoiceErrorCodes.TimeoutErrorCode, "Timeout", invoicesDoc.Invoices);
                         }
 
                         var responseDoc = XmlManipulator.Deserialize<ResponseDoc>(responseContent);

@@ -23,7 +23,6 @@ namespace Mews.Fiscalization.Greece.Model.Result
                 case "TechnicalError":
                     return ErrorCode.TechnicalError;
                 case SendInvoiceErrorCodes.TimeoutErrorCode:
-                case SendInvoiceErrorCodes.ForbiddenErrorCode:
                     return ErrorCode.NetworkError;
                 case SendInvoiceErrorCodes.UnauthorizedErrorCode:
                     return ErrorCode.InvalidCredentials;
