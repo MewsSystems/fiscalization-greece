@@ -67,6 +67,10 @@ namespace Mews.Fiscalization.Greece
                         {
                             return BuildResponseDocWithErrors(SendInvoiceErrorCodes.UnauthorizedErrorCode, "Authorization error", invoicesDoc.Invoices);
                         }
+                        if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                        {
+                            return BuildResponseDocWithErrors(SendInvoiceErrorCodes.ForbiddenErrorCode, "Forbidden", invoicesDoc.Invoices);
+                        }
 
                         var responseContent = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: false);
 

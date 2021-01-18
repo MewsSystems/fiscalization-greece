@@ -5,5 +5,6 @@
         public const string UnauthorizedErrorCode = "Unauthorized";
         public const string InternalServerErrorCode = "InternalServerError";
         public const string TimeoutErrorCode = "Timeout";
+        public const string ForbiddenErrorCode = "Forbidden";
     }
 }
