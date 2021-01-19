@@ -32,7 +32,7 @@ namespace Mews.Fiscalization.Greece.Model
                         f => Try.Error<InvoicePartyInfo, INonEmptyEnumerable<Error>>(Error.Create("Assignee name should not be provided for local counterpart."))
                     );
                 }
-                return ObjectValidations.NotNull(name).Map(n => new InvoicePartyInfo(taxNumber, branch ?? NonNegativeInt.Zero(), n, address));
+                return Try.Success<InvoicePartyInfo, INonEmptyEnumerable<Error>>(new InvoicePartyInfo(taxNumber, branch ?? NonNegativeInt.Zero(), name, address));
             });
         }
     }
