@@ -55,7 +55,7 @@ namespace Mews.Fiscalization.Greece.Tests.IntegrationTests
         internal static InvoiceParty CreateInvoiceParty(Country country, string taxNumber, string name = null, Address address = null)
         {
             return InvoiceParty.Create(
-                info: new InvoicePartyInfo(NonNegativeInt.Zero(), TaxpayerIdentificationNumber.Create(country, taxNumber).Success.Get(), name, address),
+                info: InvoicePartyInfo.Create(taxpayerNumber: TaxpayerIdentificationNumber.Create(country, taxNumber).Success.Get(), name: name, address: address).Success.Get(),
                 country: country
             ).Success.Get();
         }

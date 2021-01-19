@@ -44,7 +44,7 @@ namespace Mews.Fiscalization.Greece.Mapper
                 Country = (Dto.Xsd.Country)Enum.Parse(typeof(Dto.Xsd.Country), p.Country.Alpha2Code, true),
                 Branch = p.Info.Branch.Value,
                 Name = p.Info.Name.GetOrNull(),
-                VatNumber = p.Info.TaxIdentifier.Map(n => n.TaxpayerNumber).GetOrNull(),
+                VatNumber = p.Info.TaxpayerNumber.TaxpayerNumber,
                 Address = p.Info.Address.Map(a => GetAddress(a)).GetOrNull()
             });
 
