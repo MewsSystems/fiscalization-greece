@@ -23,17 +23,11 @@ namespace Mews.Fiscalization.Greece.Model
 
         public static ITry<InvoicePartyInfo, INonEmptyEnumerable<Error>> Create(TaxpayerIdentificationNumber taxpayerNumber, NonNegativeInt ? branch = null, string name = null, Address address = null)
         {
-            return ObjectValidations.NotNull(taxpayerNumber).FlatMap(taxNumber =>
-            {
-                if (taxNumber.Country == Countries.Greece)
-                {
-                    return name.IsNull().Match(
-                        t => Try.Success<InvoicePartyInfo, INonEmptyEnumerable<Error>>(new InvoicePartyInfo(taxNumber, branch ?? NonNegativeInt.Zero(), name, address)),
-                        f => Try.Error<InvoicePartyInfo, INonEmptyEnumerable<Error>>(Error.Create("Assignee name should not be provided for local counterpart."))
-                    );
-                }
-                return Try.Success<InvoicePartyInfo, INonEmptyEnumerable<Error>>(new InvoicePartyInfo(taxNumber, branch ?? NonNegativeInt.Zero(), name, address));
-            });
+            var numberWithValidName = ObjectValidations.NotNull(taxpayerNumber).Where(
+                evaluator: taxNumber => taxNumber.Country.Equals(Countries.Greece).Implies(() => name.IsNull()),
+                error: _ => new Error("Assignee name should not be provided for local counterpart.")
+            );
+            return numberWithValidName.Map(taxNumber => new InvoicePartyInfo(taxNumber, branch ?? NonNegativeInt.Zero(), name, address));
         }
     }
 }
